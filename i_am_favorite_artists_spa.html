@@ -88,7 +88,7 @@
 
   <!-- Header & Navigation -->
   <header class="sticky top-0 z-40 w-full glass border-b border-neutral-200/50 dark:border-white/5">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between relative">
       <!-- Logo -->
       <a href="#" onclick="navigateTo('home')" class="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-wider hover:opacity-80 transition shrink-0">
         <i data-lucide="disc" class="w-5 h-5 sm:w-6 sm:h-6 text-pink-500 animate-spin" style="animation-duration: 4s;"></i>
@@ -102,8 +102,14 @@
         <a href="#recommend" onclick="openQuiz()" class="hover:text-pink-500 dark:hover:text-pink-400 transition">Band Finder</a>
       </nav>
       
-      <!-- Action Controls Group (Theme Toggle + Finder Call) -->
+      <!-- Action Controls Group (Theme Toggle + Scroll Gauge + Finder Call) -->
       <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Scroll Percentage Gauge (Top Right) -->
+        <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-200/50 dark:bg-white/5 text-[10px] sm:text-[11px] font-mono font-bold text-neutral-600 dark:text-neutral-400 border border-neutral-300/50 dark:border-white/10 shrink-0">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-pink-500 animate-pulse"></i>
+          <span id="scroll-percent">0%</span>
+        </div>
+
         <!-- Premium Theme Toggle Button -->
         <button id="theme-toggle-btn" onclick="toggleTheme()" class="p-2.5 rounded-full glass hover:bg-neutral-200/50 dark:hover:bg-white/5 text-neutral-700 dark:text-neutral-300 hover:scale-110 active:scale-95 transition" aria-label="테마 전환 버튼">
           <!-- Light Mode Icon (Visible in Dark Mode) -->
@@ -116,6 +122,9 @@
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 밴드 추천 받기
         </button>
       </div>
+
+      <!-- Linear Top Scroll Progress Bar Bar Indicator -->
+      <div id="scroll-bar-fill" class="absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-yellow-300 via-pink-500 to-purple-600 transition-all duration-75" style="width: 0%;"></div>
     </div>
 
     <!-- Mobile Mini Navigation Belt -->
@@ -321,6 +330,54 @@
       </div>
     </section>
 
+    <!-- NEW SECTION: INDIE SPEED QUIZ & GAMIFICATION -->
+    <section id="quiz-game-section" class="pt-12 sm:pt-16 border-t border-neutral-200/50 dark:border-white/5 max-w-3xl mx-auto space-y-6">
+      <div class="space-y-2 text-center sm:text-left">
+        <span class="px-2.5 py-0.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 text-[10px] font-extrabold uppercase tracking-widest font-mono">Indie Power Test</span>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-neutral-800 dark:text-white flex items-center justify-center sm:justify-start gap-2">
+          <i data-lucide="trophy" class="w-5.5 h-5.5 text-yellow-500 animate-bounce"></i> 나의 인디력 테스트! 스피드 퀴즈
+        </h2>
+        <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+          박지원이 큐레이션한 네 팀의 밴드 상식을 테스트하고 특별한 칭호를 잠금 해제해 보세요!
+        </p>
+      </div>
+
+      <div class="glass rounded-3xl p-6 sm:p-8 border border-neutral-200/50 dark:border-white/5 shadow-md relative overflow-hidden">
+        <!-- Active Play Container -->
+        <div id="quiz-play-box" class="space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-neutral-200/50 dark:border-white/10">
+            <span id="quiz-q-num" class="text-xs font-mono font-black text-pink-500 tracking-wider">Q1</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-neutral-200 dark:bg-white/5 text-neutral-600 dark:text-neutral-400">각 25점 / 100점 만점</span>
+          </div>
+          <h3 id="quiz-q-text" class="text-sm sm:text-base font-bold text-neutral-800 dark:text-white leading-relaxed">질문이 노출되는 영역입니다.</h3>
+          <div id="quiz-ans-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <!-- Buttons dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Result Container -->
+        <div id="quiz-result-box" class="hidden text-center space-y-6 py-4">
+          <div class="w-16 h-16 rounded-full bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 mx-auto flex items-center justify-center animate-pulse">
+            <i data-lucide="award" class="w-8 h-8"></i>
+          </div>
+          <div class="space-y-2">
+            <p class="text-[10px] sm:text-[11px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-mono">인디력 판정 스코어</p>
+            <h4 id="quiz-final-score" class="text-3xl sm:text-4xl font-black text-pink-500">100점</h4>
+            <p id="quiz-badge-title" class="text-lg sm:text-xl font-black text-neutral-800 dark:text-white">🥇 우주 최강 인디 가디언</p>
+            <p id="quiz-badge-desc" class="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto leading-relaxed">칭호 부가설명</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2.5 justify-center max-w-sm mx-auto pt-4">
+            <button onclick="boastInGuestbook()" class="px-5 py-3 bg-pink-600 hover:bg-pink-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-lg shadow-pink-600/20 active:scale-95 w-full sm:w-auto">
+              <i data-lucide="share-2" class="w-4 h-4"></i> 방명록에 칭호 자랑하기
+            </button>
+            <button onclick="initQuiz()" class="px-5 py-3 bg-neutral-200 dark:bg-white/5 hover:bg-neutral-300 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-300 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 active:scale-95 w-full sm:w-auto">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i> 다시 도전하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Global Guestbook & Comment Area -->
     <section id="guestbook-section" class="pt-12 sm:pt-16 border-t border-neutral-200/50 dark:border-white/5 max-w-3xl mx-auto space-y-8">
       <div class="space-y-2">
@@ -337,7 +394,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-[10px] sm:text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider">닉네임</label>
-            <input type="text" id="comment-nickname" required maxlength="10" placeholder="귀여운 인디러버" class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/10 focus:border-pink-500 dark:focus:border-pink-500 outline-none text-neutral-800 dark:text-white transition">
+            <input type="text" id="comment-nickname" required maxlength="10" placeholder="ex) 귀여운 인디러버" class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/10 focus:border-pink-500 dark:focus:border-pink-500 outline-none text-neutral-800 dark:text-white transition">
           </div>
           <div>
             <label class="block text-[10px] sm:text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider">비밀번호 (삭제용)</label>
@@ -348,7 +405,7 @@
         <div>
           <label class="block text-[10px] sm:text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider font-mono">무드 심볼 선택</label>
           <div class="flex gap-2 flex-wrap">
-            <button type="button" onclick="selectCommentEmoji('🎸', this)" class="emoji-btn p-2.5 rounded-xl border border-pink-500 bg-pink-500/10 text-xl transition transform hover:scale-110 active:scale-95">🎸</button>
+            <button type="button" id="emoji-default-btn" onclick="selectCommentEmoji('🎸', this)" class="emoji-btn p-2.5 rounded-xl border border-pink-500 bg-pink-500/10 text-xl transition transform hover:scale-110 active:scale-95">🎸</button>
             <button type="button" onclick="selectCommentEmoji('🥁', this)" class="emoji-btn p-2.5 rounded-xl border border-neutral-300/50 dark:border-white/10 bg-neutral-200/40 dark:bg-white/5 text-xl transition transform hover:scale-110 active:scale-95">🥁</button>
             <button type="button" onclick="selectCommentEmoji('🎤', this)" class="emoji-btn p-2.5 rounded-xl border border-neutral-300/50 dark:border-white/10 bg-neutral-200/40 dark:bg-white/5 text-xl transition transform hover:scale-110 active:scale-95">🎤</button>
             <button type="button" onclick="selectCommentEmoji('🎹', this)" class="emoji-btn p-2.5 rounded-xl border border-neutral-300/50 dark:border-white/10 bg-neutral-200/40 dark:bg-white/5 text-xl transition transform hover:scale-110 active:scale-95">🎹</button>
@@ -416,7 +473,7 @@
     </div>
   </div>
 
-  <!-- Interactive Modal 1: Quiz -->
+  <!-- Interactive Modal 1: Quiz (Mood Finder) -->
   <div id="quiz-modal" class="fixed inset-0 bg-neutral-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="glass rounded-3xl w-full max-w-md p-5 sm:p-6 space-y-5 relative border border-neutral-300/40 dark:border-white/10 shadow-2xl">
       <button onclick="closeQuiz()" class="absolute top-5 right-5 text-neutral-400 hover:text-neutral-800 dark:hover:text-white transition">
@@ -560,6 +617,29 @@
       }
     };
 
+    const QUIZ_QUESTIONS = [
+      {
+        q: "대한민국 인디 록 흐름을 바꾸어 놓은 '장기하와 얼굴들'의 역사적인 메가 히트 데뷔곡은 무엇일까요?",
+        a: ["싸구려 커피", "달이 차오른다, 가자", "ㅋ", "그건 니 생각이고"],
+        correct: 0
+      },
+      {
+        q: "혁오(임현제), 술탄(지윤해), 장얼(전일준) 출신의 인디 최정예 어벤져스가 뭉친 강력한 개러지 사이키델릭 3인조 밴드는?",
+        a: ["검정치마", "실리카겔", "봉제인간", "새소년"],
+        correct: 2
+      },
+      {
+        q: "검정치마의 곡 중 '세상이 꽁꽁 얼어붙어 종말이 와도 우리는 춤을 출 거야'라는 불멸의 세기말 낭만 찬가는?",
+        a: ["EVERYTHING", "상수역", "한시 오분", "Antifreeze"],
+        correct: 3
+      },
+      {
+        q: "술탄 오브 더 디스코에서 관객의 흥을 폭발시키는 화려한 안무와 유니크한 코러스를 담당하는 핵심 멤버는?",
+        a: ["JJ핫산", "나잠 수", "김간지", "양평이형"],
+        correct: 0
+      }
+    ];
+
     const state = {
       currentPage: 'home',
       currentArtistId: null,
@@ -630,6 +710,102 @@
         p.draw();
       });
       requestAnimationFrame(animateParticles);
+    }
+
+    // Scroll Progress Logic
+    function handleScrollProgress() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? Math.round((winScroll / height) * 100) : 0;
+      
+      const percentEl = document.getElementById('scroll-percent');
+      if (percentEl) {
+        percentEl.textContent = `${scrolled}%`;
+      }
+      
+      const fillBar = document.getElementById('scroll-bar-fill');
+      if (fillBar) {
+        fillBar.style.width = `${scrolled}%`;
+      }
+    }
+    window.addEventListener('scroll', handleScrollProgress);
+
+    // Speed Quiz System Logic
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    function initQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      document.getElementById('quiz-play-box').classList.remove('hidden');
+      document.getElementById('quiz-result-box').classList.add('hidden');
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (currentQuizIndex >= QUIZ_QUESTIONS.length) {
+        showQuizResult();
+        return;
+      }
+      const qData = QUIZ_QUESTIONS[currentQuizIndex];
+      document.getElementById('quiz-q-num').textContent = `Q${currentQuizIndex + 1}`;
+      document.getElementById('quiz-q-text').textContent = qData.q;
+      
+      const optBox = document.getElementById('quiz-ans-options');
+      optBox.innerHTML = '';
+      
+      qData.a.forEach((ans, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-3.5 rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 text-xs font-semibold transition text-neutral-800 dark:text-neutral-200 active:scale-95";
+        btn.textContent = ans;
+        btn.onclick = () => selectQuizAnswer(idx);
+        optBox.appendChild(btn);
+      });
+    }
+
+    function selectQuizAnswer(idx) {
+      const qData = QUIZ_QUESTIONS[currentQuizIndex];
+      if (idx === qData.correct) {
+        quizScore += 25;
+        showToast("🎯 정답입니다! (+25점)");
+      } else {
+        showToast("❌ 아쉬운 오답입니다!");
+      }
+      currentQuizIndex++;
+      renderQuizQuestion();
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-play-box').classList.add('hidden');
+      document.getElementById('quiz-result-box').classList.remove('hidden');
+      
+      document.getElementById('quiz-final-score').textContent = `${quizScore}점`;
+      
+      let badge = "🥉 방구석 뉴비 리스너";
+      let desc = "인디 음악은 이제 시작이에요! 박지원이 숨겨놓은 최애 트랙들을 재생하며 취향의 스펙트럼을 넓혀가 보세요.";
+      
+      if (quizScore >= 100) {
+        badge = "🥇 우주 최강 인디 가디언";
+        desc = "말도 안 되는 완벽함! 박지원의 최애 밴드 전원을 꿰뚫어 보고 있군요. 당신을 명예 명예 큐레이터로 임명합니다.";
+      } else if (quizScore >= 50) {
+        badge = "🥈 홍대 클럽 단골 손님";
+        desc = "탄탄한 내공의 보유자이시군요! 봉제인간의 헤비한 기타 솔로 리듬과 술탄의 디스코 비트를 정확히 아시는 실력자입니다.";
+      }
+      
+      document.getElementById('quiz-badge-title').textContent = badge;
+      document.getElementById('quiz-badge-desc').textContent = desc;
+    }
+
+    function boastInGuestbook() {
+      const badge = document.getElementById('quiz-badge-title').textContent;
+      const contentArea = document.getElementById('comment-content');
+      contentArea.value = `[인디력 테스트 완료] 저의 리스너 칭호는 [${badge}] 입니다! ⚡ 박지원님의 취향 완벽 동화 완료!`;
+      
+      // select standard emoji '🏆' (or सीडी)
+      selectCommentEmoji('💿', document.querySelector('.emoji-btn:last-child'));
+      
+      document.getElementById('comment-form').scrollIntoView({ behavior: 'smooth' });
+      showToast("📝 방명록 입력란에 내 칭호가 자동으로 채워졌습니다! 작성해 보세요.");
     }
 
     // Guestbook Comments Management
@@ -745,6 +921,8 @@
       nickInput.value = '';
       pwInput.value = '';
       contentInput.value = '';
+      // Reset Emoji Style Selection to default First Emoji
+      selectCommentEmoji('🎸', document.getElementById('emoji-default-btn'));
       showToast('📝 방명록 글이 성공적으로 게재되었습니다!');
     }
 
@@ -1007,7 +1185,7 @@
       }, 3500);
     }
 
-    const quizSteps = [
+    const moodQuizSteps = [
       {
         options: [
           { text: "아날로그 낭만과 재치 가득한 말맛이 필요해 📻", score: "chang-kiha", desc: "당신에겐 시대를 뛰어넘는 명반을 남긴 [장기하와 얼굴들]의 쿵짝 리듬이 운명입니다." },
@@ -1030,7 +1208,7 @@
       const optionsContainer = document.getElementById('quiz-options');
       optionsContainer.innerHTML = '';
 
-      quizSteps[0].options.forEach(opt => {
+      moodQuizSteps[0].options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = "w-full text-left p-3.5 rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300 dark:border-white/5 hover:border-pink-500/50 hover:bg-pink-500/10 text-xs font-semibold transition leading-relaxed text-neutral-800 dark:text-neutral-200 active:scale-95";
         btn.textContent = opt.text;
@@ -1067,6 +1245,7 @@
       initParticles();
       animateParticles();
       loadComments();
+      initQuiz();
     }
   </script>
 </body>
