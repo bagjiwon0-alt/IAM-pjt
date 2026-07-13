@@ -27,8 +27,13 @@
   </script>
   
   <style>
-    body, header, footer, div, section, a, button, p, h1, h2, h3, h4, span, canvas {
+    body, header, footer, section, a, button, p, h1, h2, h3, h4, span {
       transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Dedicated transition exclusion for Vinyl Player components to fix rotation freezes */
+    #player-disk, #mobile-player-disk, #player-cover-img, #mobile-player-cover {
+      transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease !important;
     }
     
     /* Elegant glassmorphism adapting to dark/light theme */
@@ -310,12 +315,12 @@
           </div>
         </div>
 
-        <!-- Right Side Desktop Player Dashboard (Optimized for Error-Free Vinyl Playback Only) -->
+        <!-- Right Side Desktop Player Dashboard (Optimized Retro Turntable Box) -->
         <div class="hidden lg:block space-y-6">
-          <div class="glass rounded-2xl p-6 sticky top-24 border border-neutral-200/50 dark:border-white/10 shadow-2xl overflow-hidden">
-            <div class="flex items-center justify-between pb-4 border-b border-neutral-200/50 dark:border-white/5 mb-6">
+          <div class="glass rounded-2xl p-6 sticky top-24 border border-neutral-200/50 dark:border-white/10 shadow-2xl overflow-hidden bg-neutral-950/20">
+            <div class="flex items-center justify-between pb-4 border-b border-neutral-200/50 dark:border-white/5 mb-4">
               <span class="text-[10px] text-neutral-500 dark:text-neutral-400 font-bold uppercase flex items-center gap-1.5">
-                <i data-lucide="radio" class="w-4 h-4 text-pink-500 animate-pulse"></i> LISTENING DEVICE
+                <i data-lucide="radio" class="w-4 h-4 text-pink-500 animate-pulse"></i> RETRO TURNTABLE
               </span>
               <div id="equalizer" class="hidden flex items-end gap-0.5 h-5">
                 <div class="w-0.5 bg-pink-500 rounded-full eq-bar"></div>
@@ -325,23 +330,36 @@
               </div>
             </div>
 
-            <!-- Beautiful Retro Vinyl Rotating Platter Area -->
-            <div class="relative w-full h-48 mx-auto mb-6 flex items-center justify-center">
-              <div id="vinyl-view" class="absolute inset-0 flex items-center justify-center">
-                <!-- Rotatable Vinyl Platter: Cleaned of conflict transform duration styles for seamless keyframes -->
-                <div id="player-disk" class="relative w-40 h-40 rounded-full bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-850 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 border-4 border-neutral-300 dark:border-neutral-800 shadow-2xl flex items-center justify-center">
-                  <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-neutral-900 dark:border-neutral-950 relative z-10 bg-neutral-800 flex items-center justify-center">
+            <!-- Procedural Audio Waves Canvas Area -->
+            <div class="relative w-full h-52 mx-auto mb-4 flex items-center justify-center bg-black/40 rounded-2xl border border-neutral-200/10 dark:border-white/5 overflow-hidden">
+              <canvas id="audio-wave-canvas" class="absolute inset-0 w-full h-full opacity-60"></canvas>
+              
+              <!-- Rotatable Vinyl Platter Placed Over Wave Canvas -->
+              <div id="vinyl-view" class="absolute inset-0 flex items-center justify-center scale-95">
+                <div id="player-disk" class="relative w-36 h-36 rounded-full bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-850 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 border-4 border-neutral-300 dark:border-neutral-800 shadow-2xl flex items-center justify-center">
+                  <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-neutral-900 dark:border-neutral-950 relative z-10 bg-neutral-800 flex items-center justify-center">
                     <img id="player-cover-img" src="" alt="" class="w-full h-full object-cover opacity-85 hidden">
                     <div class="w-3 h-3 rounded-full bg-white dark:bg-neutral-950 absolute z-20 shadow-inner"></div>
                   </div>
                   <div class="absolute inset-2 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
                   <div class="absolute inset-6 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
-                  <div class="absolute inset-12 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
+                  <div class="absolute inset-10 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
                 </div>
               </div>
+
+              <!-- SVG Stylized Mechanical Tone-arm -->
+              <svg id="tone-arm" class="absolute top-2 right-4 w-16 h-28 pointer-events-none z-30 transition-transform duration-1000 ease-in-out origin-[45px_12px]" style="transform: rotate(-16deg);" viewBox="0 0 60 120">
+                <circle cx="45" cy="12" r="8" fill="#64748b" />
+                <circle cx="45" cy="12" r="3" fill="#334155" />
+                <!-- Arm metallic pole -->
+                <path d="M 45 12 L 20 85 L 18 100" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+                <!-- Cartridge head -->
+                <rect x="12" y="96" width="12" height="18" rx="2" fill="#ef4444" transform="rotate(25 18 100)" />
+                <rect x="15" y="112" width="6" height="4" fill="#cbd5e1" transform="rotate(25 18 100)" />
+              </svg>
             </div>
 
-            <div class="text-center space-y-1.5 mb-6">
+            <div class="text-center space-y-1.5 mb-4">
               <div class="flex items-center justify-center gap-2">
                 <h4 id="player-title" class="font-bold text-base text-neutral-800 dark:text-white truncate px-2">선택된 트랙 없음</h4>
               </div>
@@ -355,7 +373,7 @@
 
               <div class="p-4 rounded-xl bg-neutral-200/50 dark:bg-white/5 border border-neutral-300/50 dark:border-white/5">
                 <p id="curator-comment" class="text-xs text-neutral-600 dark:text-neutral-300 italic text-center leading-relaxed">
-                  "곡을 선택하면 회전하는 바이닐 모드가 활성화되며 우측 상단 다이렉트 외부 청취 버튼이 연동됩니다."
+                  "곡을 선택하면 톤암이 LP판 위로 안착하여 회전 모드가 시작되며, 실시간 음원 이퀄라이저 파형을 동적으로 시뮬레이션합니다."
                 </p>
               </div>
             </div>
@@ -429,7 +447,6 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-[10px] sm:text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider">닉네임</label>
-            <!-- ex) 귀여운 인디러버 placeholder updated as requested -->
             <input type="text" id="comment-nickname" required maxlength="10" placeholder="ex) 귀여운 인디러버" class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/10 focus:border-pink-500 dark:focus:border-pink-500 outline-none text-neutral-800 dark:text-white transition">
           </div>
           <div>
@@ -489,7 +506,7 @@
   <div id="mobile-sticky-player" class="lg:hidden fixed bottom-4 left-4 right-4 z-50 glass rounded-2xl p-3.5 border border-neutral-300 dark:border-white/10 shadow-2xl flex items-center justify-between gap-3 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-500">
     <div class="flex items-center gap-3 min-w-0">
       <div class="relative w-12 h-12 shrink-0">
-        <!-- Rotatable Mobile Vinyl: Cleaned of conflict transition transform styles for seamless rotation -->
+        <!-- Rotatable Mobile Vinyl -->
         <div id="mobile-player-disk" class="w-full h-full rounded-full bg-neutral-900 border-2 border-neutral-700 flex items-center justify-center shadow-lg">
           <img id="mobile-player-cover" src="" alt="" class="w-8 h-8 rounded-full object-cover">
         </div>
@@ -583,7 +600,7 @@
           { track: '살결', title: '내 사랑에 노련한 사람이 어딨나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/yeTqW3BOzKY?si=DlCfJdguqyfWvx0o', desc: '장얼 특유의 나른하면서도 끈적이는 빈티지 감성의 숨은 명곡', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
           { track: '내 사랑에 노련한 사람이 어딨나요', title: '내 사랑에 노련한 사람이 어딨나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/fJib0BL0frc?si=11CzJbBU1fyDK49w', desc: '사랑 앞에 서툴 수밖에 없는 모든 인간들을 대변하는 위트송', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
           { track: '가나다', title: '내 사랑에 노련한 사람이 어딨나요', year: '2014', pick: 'jiwon', link: 'https://youtu.be/17YyZerpohY?si=GNFq61I7N1yMiZaz', desc: '기초적인 자음 모음 결합 위에 얹어낸 말도 안 되는 리드미컬 펑크록', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
-          { track: '그건 니 생각이고', title: 'mono', year: '2018', pick: 'jiwon', link: 'https://youtu.be/0rMNlyQo958?si=_Gt5TNUZjhEjSDNt', desc: '참견이 넘치는 세상을 향해 쿨하게 던지는 최고의 일침 트랙', cover: 'https://i.namu.wiki/i/52h7P3zz2B69bUEmGRuTT8-5hok9co6JDP93WOMT-ABj2kmXNW9gOD5As9Fmh9nUKAFgMmmc8_pWJIMoSdGMVysUmpIaDAycoPSnniVyEnIc79NwMb8xpuJbaMnihdAAebwjjw03rWEeMSoJ39j9Cg.webp' }
+          { track: '그건 니 생각이고', title: 'mono', year: '2018', pick: 'jiwon', link: 'https://youtu.be/0rMNlyQo958?si=_Gt5TNUZjhEjSDNt', desc: '참견이 넘치는 세상을 향해 쿨하게 던지는 최고의 일침 트랙', cover: 'https://i.namu.wiki/i/52h7P3zz2B69bUEmGRuTT8-5真实_pWJIMoSdGMVysUmpIaDAycoPSnniVyEnIc79NwMb8xpuJbaMnihdAAebwjjw03rWEeMSoJ39j9Cg.webp' || 'https://i.namu.wiki/i/52h7P3zz2B69bUEmGRuTT8-5hok9co6JDP93WOMT-ABj2kmXNW9gOD5As9Fmh9nUKAFgMmmc8_pWJIMoSdGMVysUmpIaDAycoPSnniVyEnIc79NwMb8xpuJbaMnihdAAebwjjw03rWEeMSoJ39j9Cg.webp' }
         ]
       },
       'bongjeingan': {
@@ -647,8 +664,8 @@
           { track: 'EVERYTHING', title: 'TEAM BABY', year: '2017', pick: 'public', link: 'https://youtu.be/K4giYflGxAY?si=7bY9f-A-FEx8xYaP', desc: '이 세상 그 어떤 단어로도 다 채우지 못할 올타임 세레나데', cover: 'https://i.namu.wiki/i/Cs5e2QX2LIe4bfy81TqQAhCirFzm_XoI4IxRvXhlFGQdxaYV-ecb67WgZ8YWpjTUuIS21sbw3YjP8VgIeN72Q-a-yGqe7A6iUj-bD9BsRDYX_ZLdhnfLBR58i2Vr7wc-b_XYLuSmQ5LrHPD6otenIg.webp' },
           { track: 'Antifreeze', title: '201', year: '2008', pick: 'public', link: 'https://youtu.be/ZOx12VfIg0g?si=Xmz0qgsnyb6mpY16', desc: '세상이 꽁꽁 얼어붙어 종말이 와도 우리는 춤을 출 거라는 찬가', cover: 'https://i.namu.wiki/i/HRPASgsBYkeT7psEGW2alLZZemwaGmp-B98xLjsrnRvNYnoZSiFtRwhenU0AaJwnUsuYhXd91_-rLaf7IvsQjk6kjYCFQDc92mDHs6cNkDdiJwzwgzSDbwutV8E4XNrF6t5WnBzhsWT4WnpThQEFVw.webp' },
           { track: '기다린만큼, 더', title: '또 오해영 OST', year: '2016', pick: 'public', link: 'https://youtu.be/uG2se-8-BzE?si=RNMzc5D9cSjyTi49', desc: '쓸쓸한 어쿠스틱 스트링 위에 절절한 그리움을 채운 대중적 메가히트곡', cover: 'https://i.namu.wiki/i/qi6OrfKvCsC36e7IPujboJye9xk0SEo-dmeNxb1UHWqU3nbcQ4FzWsyjT_XbPVNA8fW2Z1q_8mvuQNlNbt_ZI48H8lUS9fO3DW5oN4qnZ1qTcokQxZBJo_GfNB7y6J423807ae00d-ESJv3bNROzfg.webp' },
-          { track: 'Friends in bed', title: 'TEEN TROUBLES', year: '2019', pick: 'jiwon', link: 'https://youtu.be/unkWxF85Dp4?si=WT1JQPhM4uB8Ki3s', desc: '몽환적인 인디팝의 질감을 영문 가사로 아주 세련되게 채운 곡', cover: 'https://i.namu.wiki/i/o45MFaW8CkCSsPnUIMyle6iMYW0TWvolEXCeqb69kcuaBjSn8Txglu7Rp1r5irJvZ6l9r3Mt-MunirQIpXxzgm_A_wI6sHOQHcVKR9G0fLOgJofGVB5DqbBrHNsxENQzyU6mDH6y5YSoW873bK5nUA.webp' },
-          { track: '상수역', title: 'THIRSTY', year: '2019', pick: 'jiwon', link: 'https://youtu.be/3b6GhIprBdM?si=MxhYJurWQ0m2Qtgc', desc: '특정 공간이 주는 아련함과 낭만적인 밤공기를 스케치하듯 노래한 명작', cover: 'https://image.bugsm.co.kr/album/images/500/202279/20227918.jpg' },
+          { track: 'Friends in bed', title: 'TEEN TROUBLES', year: '2019', pick: 'jiwon', link: 'https://youtu.be/unkWxF85Dp4?si=WT1JQPhM4uB8Ki3s', desc: '몽환적인 베드룸 인디팝의 질감을 영문 가사로 아주 세련되게 채운 곡', cover: 'https://i.namu.wiki/i/o45MFaW8CkCSsPnUIMyle6iMYW0TWvolEXCeqb69kcuaBjSn8Txglu7Rp1r5irJvZ6l9r3Mt-MunirQIpXxzgm_A_wI6sHOQHcVKR9G0fLOgJofGVB5DqbBrHNsxENQzyU6mDH6y5YSoW873bK5nUA.webp' },
+          { track: '상수역', title: 'THIRSTY', year: '2019', pick: 'jiwon', link: 'https://youtu.be/3b6GhIprBdM?si=MxhYJurWQ0m2Qtgc', desc: '특정 공간이 주는 아련함과 낭만적인 밤공기를 스케치하듯 노래한 명작', cover: 'https://i.namu.wiki/i/xeg5QdjyGs0pQd7COYieZuk9gi_COr7PK7QHM40ex9L_vFILMD9xGj2caAGA8GbH_ydbgZ-5OuTweMlNKTQcRNjfugenPKtDgsUR6UsBxurTcA0HM41kYXLKn_VVanHEv8B6yc6N_g1KfoTiywuFpQ.webp' },
           { track: '한시 오분', title: 'TEAM BABY', year: '2017', pick: 'jiwon', link: 'https://youtu.be/vFXmR5wJY0w?si=w4WITP7xWTUEMsv5', desc: '시계 바늘이 멈춰 선 듯 흐르는 조휴일표 감성 코드의 정점 트랙', cover: 'https://i.namu.wiki/i/Cs5e2QX2LIe4bfy81TqQAhCirFzm_XoI4IxRvXhlFGQdxaYV-ecb67WgZ8YWpjTUuIS21sbw3YjP8VgIeN72Q-a-yGqe7A6iUj-bD9BsRDYX_ZLdhnfLBR58i2Vr7wc-b_XYLuSmQ5LrHPD6otenIg.webp' }
         ]
       }
@@ -747,6 +764,46 @@
         p.draw();
       });
       requestAnimationFrame(animateParticles);
+    }
+
+    // Procedural Ambient sound wave visualizer canvas simulation
+    const waveCanvas = document.getElementById('audio-wave-canvas');
+    const waveCtx = waveCanvas.getContext('2d');
+    let wavePhase = 0;
+
+    function resizeWaveCanvas() {
+      waveCanvas.width = waveCanvas.offsetWidth;
+      waveCanvas.height = waveCanvas.offsetHeight;
+    }
+    window.addEventListener('resize', resizeWaveCanvas);
+    setTimeout(resizeWaveCanvas, 100);
+
+    function animateSoundwaves() {
+      waveCtx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
+      
+      if (state.isPlaying) {
+        wavePhase += 0.04;
+        const width = waveCanvas.width;
+        const height = waveCanvas.height;
+        
+        // Multiwave rendering logic
+        for (let waveIndex = 0; waveIndex < 3; waveIndex++) {
+          waveCtx.beginPath();
+          const amp = 12 + waveIndex * 8; // Wave Amplitude
+          const freq = 0.015 - waveIndex * 0.003; // Wave Frequency
+          
+          waveCtx.strokeStyle = state.accentColor.replace('0.35', (0.18 - waveIndex * 0.04).toFixed(2));
+          waveCtx.lineWidth = 2 + waveIndex * 0.5;
+          
+          for (let x = 0; x < width; x += 5) {
+            const y = height / 2 + Math.sin(x * freq + wavePhase + waveIndex * 1.5) * amp * Math.sin(x / width * Math.PI);
+            if (x === 0) waveCtx.moveTo(x, y);
+            else waveCtx.lineTo(x, y);
+          }
+          waveCtx.stroke();
+        }
+      }
+      requestAnimationFrame(animateSoundwaves);
     }
 
     // Scroll Progress Logic
@@ -1136,7 +1193,6 @@
         const item = document.createElement('div');
         item.className = 'flex flex-row items-center justify-between p-3 sm:p-3.5 rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/5 hover:bg-neutral-300/40 dark:hover:bg-white/10 hover:border-neutral-400/50 dark:hover:border-white/15 transition cursor-pointer gap-2 sm:gap-4';
         
-        // Pass the album.cover as the fifth argument!
         item.onclick = () => selectTrack(album.track, data.name, album.link, album.desc, album.cover);
 
         const badgeHtml = album.pick === 'public' 
@@ -1185,9 +1241,11 @@
       const btn = document.getElementById('youtube-direct-btn');
       btn.href = link;
 
+      // Reset tone-arm and spinning states to resting position
       state.isPlaying = false;
       document.getElementById('equalizer').classList.add('hidden');
       document.getElementById('player-disk').classList.remove('spin-vinyl-active');
+      document.getElementById('tone-arm').style.transform = "rotate(-16deg)";
     }
 
     function selectTrack(track, artistName, link, desc, coverImg) {
@@ -1199,6 +1257,9 @@
       // Activating Desktop custom hardware spin transition flawlessly
       const disk = document.getElementById('player-disk');
       disk.classList.add('spin-vinyl-active');
+
+      // Pivot the physical metallic tone-arm bar onto the vinyl platter smoothly
+      document.getElementById('tone-arm').style.transform = "rotate(10deg)";
 
       // Trigger Mobile Sticky Bottom Player Panel smoothly
       const mobPlayer = document.getElementById('mobile-sticky-player');
@@ -1314,6 +1375,7 @@
       initializeTheme();
       initParticles();
       animateParticles();
+      animateSoundwaves();
       loadComments();
       initQuiz();
     }
