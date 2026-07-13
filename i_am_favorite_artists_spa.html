@@ -27,8 +27,7 @@
   </script>
   
   <style>
-    /* Smooth transitions for theme switcher */
-    body, header, footer, div, section, a, button, p, h1, h2, h3, h4, span {
+    body, header, footer, div, section, a, button, p, h1, h2, h3, h4, span, canvas {
       transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     }
     
@@ -55,6 +54,7 @@
       -webkit-text-fill-color: transparent;
     }
 
+    /* Equalizer bar motion */
     @keyframes bounce {
       0%, 100% { height: 4px; }
       50% { height: 24px; }
@@ -66,6 +66,35 @@
     .eq-bar:nth-child(3) { animation-delay: 0.3s; }
     .eq-bar:nth-child(4) { animation-delay: 0.45s; }
     
+    /* Perfect Cross-Platform Hardware Accelerated Vinyl Rotation keyframes */
+    @keyframes spin-vinyl {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spin-vinyl-active {
+      animation: spin-vinyl 12s linear infinite !important;
+    }
+    
+    /* Floating Heart Animation for Comment Likes */
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.8) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-80px) scale(1.2) rotate(15deg);
+        opacity: 0;
+      }
+    }
+    .floating-heart {
+      position: absolute;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+      color: #ec4899;
+      font-size: 16px;
+      z-index: 50;
+    }
+
     /* Disable ugly horizontal scrollbars */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
@@ -85,6 +114,9 @@
 
   <!-- Subtle drifting background particles canvas -->
   <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
+  
+  <!-- Dynamic Color Aura backdrop for atmospheric immersive lighting -->
+  <div id="bg-aura" class="fixed inset-0 pointer-events-none -z-20 opacity-25 dark:opacity-30 blur-[130px] transition-all duration-1000 ease-out" style="background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.3) 0%, transparent 70%);"></div>
 
   <!-- Header & Navigation -->
   <header class="sticky top-0 z-40 w-full glass border-b border-neutral-200/50 dark:border-white/5">
@@ -102,19 +134,17 @@
         <a href="#recommend" onclick="openQuiz()" class="hover:text-pink-500 dark:hover:text-pink-400 transition">Band Finder</a>
       </nav>
       
-      <!-- Action Controls Group (Theme Toggle + Scroll Gauge + Finder Call) -->
+      <!-- Action Controls Group -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Scroll Percentage Gauge (Top Right) -->
+        <!-- Scroll Percentage Gauge -->
         <div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-200/50 dark:bg-white/5 text-[10px] sm:text-[11px] font-mono font-bold text-neutral-600 dark:text-neutral-400 border border-neutral-300/50 dark:border-white/10 shrink-0">
           <i data-lucide="compass" class="w-3.5 h-3.5 text-pink-500 animate-pulse"></i>
           <span id="scroll-percent">0%</span>
         </div>
 
-        <!-- Premium Theme Toggle Button -->
+        <!-- Theme Toggle Button -->
         <button id="theme-toggle-btn" onclick="toggleTheme()" class="p-2.5 rounded-full glass hover:bg-neutral-200/50 dark:hover:bg-white/5 text-neutral-700 dark:text-neutral-300 hover:scale-110 active:scale-95 transition" aria-label="테마 전환 버튼">
-          <!-- Light Mode Icon (Visible in Dark Mode) -->
           <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
-          <!-- Dark Mode Icon (Visible in Light Mode) -->
           <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-indigo-600"></i>
         </button>
 
@@ -123,7 +153,7 @@
         </button>
       </div>
 
-      <!-- Linear Top Scroll Progress Bar Bar Indicator -->
+      <!-- Linear Top Scroll Progress Bar -->
       <div id="scroll-bar-fill" class="absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-yellow-300 via-pink-500 to-purple-600 transition-all duration-75" style="width: 0%;"></div>
     </div>
 
@@ -150,7 +180,7 @@
         </p>
       </div>
 
-      <!-- Grid of 4 Artists (Optimized Responsive Grid & Unsplash High Res Backups) -->
+      <!-- Grid of 4 Artists -->
       <div id="artists-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
         
         <!-- Card 1: 장기하와 얼굴들 -->
@@ -222,7 +252,7 @@
 
     <!-- PAGE 2: ARTIST DETAIL -->
     <section id="detail-page" class="hidden space-y-8 sm:space-y-12">
-      <button onclick="navigateTo('home')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-200/50 dark:bg-white/5 hover:bg-neutral-300 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition text-xs font-bold active:scale-95">
+      <button onclick="navigateTo('home')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-200/50 dark:bg-white/5 hover:bg-neutral-300 dark:hover:bg-white/10 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:white transition text-xs font-bold active:scale-95">
         <i data-lucide="arrow-left" class="w-4 h-4"></i> 메인으로 돌아가기
       </button>
 
@@ -280,9 +310,9 @@
           </div>
         </div>
 
-        <!-- Right Side Desktop Player Dashboard -->
+        <!-- Right Side Desktop Player Dashboard (Optimized for Error-Free Vinyl Playback Only) -->
         <div class="hidden lg:block space-y-6">
-          <div class="glass rounded-2xl p-6 sticky top-24 border border-neutral-200/50 dark:border-white/10 shadow-2xl">
+          <div class="glass rounded-2xl p-6 sticky top-24 border border-neutral-200/50 dark:border-white/10 shadow-2xl overflow-hidden">
             <div class="flex items-center justify-between pb-4 border-b border-neutral-200/50 dark:border-white/5 mb-6">
               <span class="text-[10px] text-neutral-500 dark:text-neutral-400 font-bold uppercase flex items-center gap-1.5">
                 <i data-lucide="radio" class="w-4 h-4 text-pink-500 animate-pulse"></i> LISTENING DEVICE
@@ -295,21 +325,26 @@
               </div>
             </div>
 
-            <!-- Vinyl Player Display Canvas Concept -->
-            <div class="relative w-44 h-44 mx-auto mb-6 flex items-center justify-center group">
-              <div id="player-disk" class="absolute inset-0 rounded-full bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-850 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 border-4 border-neutral-300 dark:border-neutral-800 shadow-2xl flex items-center justify-center transition duration-500 transform">
-                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-neutral-900 dark:border-neutral-950 relative z-10 bg-neutral-800 flex items-center justify-center">
-                  <img id="player-cover-img" src="" alt="" class="w-full h-full object-cover opacity-60 hidden">
-                  <div class="w-3 h-3 rounded-full bg-white dark:bg-neutral-950 absolute z-20 shadow-inner"></div>
+            <!-- Beautiful Retro Vinyl Rotating Platter Area -->
+            <div class="relative w-full h-48 mx-auto mb-6 flex items-center justify-center">
+              <div id="vinyl-view" class="absolute inset-0 flex items-center justify-center">
+                <!-- Rotatable Vinyl Platter: Cleaned of conflict transform duration styles for seamless keyframes -->
+                <div id="player-disk" class="relative w-40 h-40 rounded-full bg-gradient-to-r from-neutral-800 via-neutral-900 to-neutral-850 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 border-4 border-neutral-300 dark:border-neutral-800 shadow-2xl flex items-center justify-center">
+                  <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-neutral-900 dark:border-neutral-950 relative z-10 bg-neutral-800 flex items-center justify-center">
+                    <img id="player-cover-img" src="" alt="" class="w-full h-full object-cover opacity-85 hidden">
+                    <div class="w-3 h-3 rounded-full bg-white dark:bg-neutral-950 absolute z-20 shadow-inner"></div>
+                  </div>
+                  <div class="absolute inset-2 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
+                  <div class="absolute inset-6 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
+                  <div class="absolute inset-12 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
                 </div>
               </div>
-              <div class="absolute inset-2 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
-              <div class="absolute inset-6 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
-              <div class="absolute inset-12 rounded-full border border-neutral-400/10 dark:border-white/5 pointer-events-none"></div>
             </div>
 
             <div class="text-center space-y-1.5 mb-6">
-              <h4 id="player-title" class="font-bold text-base text-neutral-800 dark:text-white truncate px-2">선택된 트랙 없음</h4>
+              <div class="flex items-center justify-center gap-2">
+                <h4 id="player-title" class="font-bold text-base text-neutral-800 dark:text-white truncate px-2">선택된 트랙 없음</h4>
+              </div>
               <p id="player-artist" class="text-xs text-neutral-500 dark:text-neutral-400">곡을 아래 리스트에서 골라주세요</p>
             </div>
 
@@ -320,7 +355,7 @@
 
               <div class="p-4 rounded-xl bg-neutral-200/50 dark:bg-white/5 border border-neutral-300/50 dark:border-white/5">
                 <p id="curator-comment" class="text-xs text-neutral-600 dark:text-neutral-300 italic text-center leading-relaxed">
-                  "곡을 선택하면 아티스트 공식 유튜브 채널의 고화질 스트리밍 박스로 다이렉트 연동됩니다."
+                  "곡을 선택하면 회전하는 바이닐 모드가 활성화되며 우측 상단 다이렉트 외부 청취 버튼이 연동됩니다."
                 </p>
               </div>
             </div>
@@ -394,6 +429,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-[10px] sm:text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-1.5 uppercase tracking-wider">닉네임</label>
+            <!-- ex) 귀여운 인디러버 placeholder updated as requested -->
             <input type="text" id="comment-nickname" required maxlength="10" placeholder="ex) 귀여운 인디러버" class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/10 focus:border-pink-500 dark:focus:border-pink-500 outline-none text-neutral-800 dark:text-white transition">
           </div>
           <div>
@@ -434,7 +470,7 @@
 
   </main>
 
-  <!-- Comment Delete Password Prompt Modal (Prevents raw prompt browser boxes) -->
+  <!-- Comment Delete Password Prompt Modal -->
   <div id="delete-confirm-modal" class="fixed inset-0 bg-neutral-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="glass rounded-2xl w-full max-w-sm p-5 space-y-4 relative border border-neutral-300/40 dark:border-white/10 shadow-2xl">
       <h4 class="text-sm font-bold text-neutral-800 dark:text-white flex items-center gap-2">
@@ -449,10 +485,11 @@
     </div>
   </div>
 
-  <!-- Mobile Persistent Sticky Bottom Mini Player (Shows when a song is selected on mobile) -->
+  <!-- Mobile Persistent Sticky Bottom Mini Player -->
   <div id="mobile-sticky-player" class="lg:hidden fixed bottom-4 left-4 right-4 z-50 glass rounded-2xl p-3.5 border border-neutral-300 dark:border-white/10 shadow-2xl flex items-center justify-between gap-3 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-500">
     <div class="flex items-center gap-3 min-w-0">
       <div class="relative w-12 h-12 shrink-0">
+        <!-- Rotatable Mobile Vinyl: Cleaned of conflict transition transform styles for seamless rotation -->
         <div id="mobile-player-disk" class="w-full h-full rounded-full bg-neutral-900 border-2 border-neutral-700 flex items-center justify-center shadow-lg">
           <img id="mobile-player-cover" src="" alt="" class="w-8 h-8 rounded-full object-cover">
         </div>
@@ -467,7 +504,7 @@
       <a id="mobile-youtube-btn" href="#" target="_blank" class="px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-[10px] font-bold flex items-center gap-1 shadow-md transition active:scale-95">
         <i data-lucide="youtube" class="w-3.5 h-3.5"></i> 재생
       </a>
-      <button onclick="dismissMobilePlayer()" class="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white transition">
+      <button onclick="dismissMobilePlayer()" class="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:white transition">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
     </div>
@@ -483,7 +520,7 @@
       <div id="quiz-question-container" class="space-y-5">
         <div class="space-y-1">
           <span class="text-xs text-pink-500 dark:text-pink-400 font-bold uppercase tracking-wider">Mood Finder</span>
-          <h3 class="text-lg font-bold text-neutral-800 dark:text-white">지금 끌리는 사운드는 어떤 종류인가요?</h3>
+          <h3 class="text-lg font-bold">지금 끌리는 사운드는 어떤 종류인가요?</h3>
         </div>
         <div id="quiz-options" class="space-y-2.5"></div>
       </div>
@@ -504,7 +541,7 @@
     </div>
   </div>
 
-  <!-- Toast Toast -->
+  <!-- Toast Message -->
   <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 rounded-xl bg-neutral-900 dark:bg-neutral-800 border border-pink-500/20 text-white text-xs font-semibold shadow-2xl flex items-center gap-2 z-50 transform translate-y-24 opacity-0 transition-all duration-300">
     <i data-lucide="alert-circle" class="w-4 h-4 text-pink-500"></i>
     <span id="toast-msg">알림</span>
@@ -541,12 +578,12 @@
           { name: '이종민', role: '건반', img: 'https://i.namu.wiki/i/abULAjjgUPrtWnvLbzS8rWAswu5ZnJgxkRWpmkqc-N5oA243l31cVvI8CRlChCN6cNg80Ygpi4GNvz_Sj4S3ntPrN8ZBNsoOyb1UpLt42tgL1j0qZGdfBMQvQcIm9NI7-TtIhdrjq4YbJMI5l_XXCw.webp' }
         ],
         albums: [
-          { track: 'ㅋ', title: '내 사랑에 노련한 사람이 어디 있나요', year: '2016', pick: 'public', link: 'https://youtu.be/HvELS0EKcPw?si=adrbLEBWxp_4HP9V', desc: '모바일 시대 소통의 허무함을 유쾌한 리듬으로 저격한 명곡' },
-          { track: '싸구려 커피', title: '별일 없이 산다', year: '2009', pick: 'public', link: 'https://youtu.be/cb0V4Dc1nnE?si=WQohvtz4YPPtthpD', desc: '대한민국 인디의 흐름을 통째로 바꾼 상징적인 읊조림' },
-          { track: '살결', title: '내 사랑에 노련한 사람이 어디 있나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/yeTqW3BOzKY?si=DlCfJdguqyfWvx0o', desc: '장얼 특유의 나른하면서도 끈적이는 빈티지 감성의 숨은 명곡' },
-          { track: '내 사랑에 노련한 사람이 어디 있나요', title: '4집 동명 타이틀', year: '2016', pick: 'jiwon', link: 'https://youtu.be/fJib0BL0frc?si=11CzJbBU1fyDK49w', desc: '사랑 앞에 서툴 수밖에 없는 모든 인간들을 대변하는 위트송' },
-          { track: '가나다', title: '사람의 마음', year: '2014', pick: 'jiwon', link: 'https://youtu.be/17YyZerpohY?si=GNFq61I7N1yMiZaz', desc: '기초적인 자음 모음 결합 위에 얹어낸 말도 안 되는 리드미컬 펑크록' },
-          { track: '그건 니 생각이고', title: 'mono', year: '2018', pick: 'jiwon', link: 'https://youtu.be/0rMNlyQo958?si=_Gt5TNUZjhEjSDNt', desc: '참견이 넘치는 세상을 향해 쿨하게 던지는 최고의 일침 트랙' }
+          { track: 'ㅋ', title: '내 사랑에 노련한 사람이 어딨나요', year: '2016', pick: 'public', link: 'https://youtu.be/HvELS0EKcPw?si=adrbLEBWxp_4HP9V', desc: '모바일 시대 소통의 허무함을 유쾌한 리듬으로 저격한 명곡', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
+          { track: '싸구려 커피', title: '별일 없이 산다', year: '2009', pick: 'public', link: 'https://youtu.be/cb0V4Dc1nnE?si=WQohvtz4YPPtthpD', desc: '대한민국 인디의 흐름을 통째로 바꾼 상징적인 읊조림', cover: 'https://i.namu.wiki/i/kdetWHnkBkaO1KjI9zlfasTiCtDaTyluUTgIIrzE8rr_iC_UeVlkalOLc4QbQtSeD4MSRBQHag51BfQ1Sdq3cL_VABy7xoNs8S7_hOw9YZ8K61pHhhGqZu6mxlpHeI0nOIs24G8JmY30MHVvApQsMA.webp' },
+          { track: '살결', title: '내 사랑에 노련한 사람이 어딨나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/yeTqW3BOzKY?si=DlCfJdguqyfWvx0o', desc: '장얼 특유의 나른하면서도 끈적이는 빈티지 감성의 숨은 명곡', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
+          { track: '내 사랑에 노련한 사람이 어딨나요', title: '내 사랑에 노련한 사람이 어딨나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/fJib0BL0frc?si=11CzJbBU1fyDK49w', desc: '사랑 앞에 서툴 수밖에 없는 모든 인간들을 대변하는 위트송', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
+          { track: '가나다', title: '내 사랑에 노련한 사람이 어딨나요', year: '2014', pick: 'jiwon', link: 'https://youtu.be/17YyZerpohY?si=GNFq61I7N1yMiZaz', desc: '기초적인 자음 모음 결합 위에 얹어낸 말도 안 되는 리드미컬 펑크록', cover: 'https://i.namu.wiki/i/hKQxVjpmWDdCmhVbvOdr9Kg2wk4BfTIaBQvwGbkuetTnM3YkIPdzwjIl1XSn196TUrqgtfzG4UYIZbeFMDPJ-6KBKYOgMix559PYoki_mR0Q3dkUJV1zRrQaf2rQ97abMUp-iFizG65ei3M_uORBLQ.webp' },
+          { track: '그건 니 생각이고', title: 'mono', year: '2018', pick: 'jiwon', link: 'https://youtu.be/0rMNlyQo958?si=_Gt5TNUZjhEjSDNt', desc: '참견이 넘치는 세상을 향해 쿨하게 던지는 최고의 일침 트랙', cover: 'https://i.namu.wiki/i/52h7P3zz2B69bUEmGRuTT8-5hok9co6JDP93WOMT-ABj2kmXNW9gOD5As9Fmh9nUKAFgMmmc8_pWJIMoSdGMVysUmpIaDAycoPSnniVyEnIc79NwMb8xpuJbaMnihdAAebwjjw03rWEeMSoJ39j9Cg.webp' }
         ]
       },
       'bongjeingan': {
@@ -563,12 +600,12 @@
           { name: '전일준', role: '드럼 (장기하와 얼굴들 출신)', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROTlYXxl3QWGLslv7lNMZlRiFxBX5c0oQSerVZVwCdJA&s=10' }
         ],
         albums: [
-          { track: '12가지말들', title: '12SANG', year: '2023', pick: 'public', link: 'https://youtu.be/oq9GI8GtEl0?si=EkuLti0N2V05DzgK', desc: '리드미컬한 지윤해의 보이스와 묵직한 베이스 전개가 돋보이는 곡' },
-          { track: 'BABY', title: '12SANG', year: '2023', pick: 'public', link: 'https://youtu.be/BFx0e32SG44?si=rwkcgmhkngh3dsbx', desc: '거친 라이브 클럽의 공기가 그대로 느껴지는 거침없는 합주' },
-          { track: '밤의 달리기', title: 'Single', year: '2023', pick: 'jiwon', link: 'https://youtu.be/jlcexgj7sAs?si=rPQu48j3vR8hsAM6', desc: '어두운 야간 도로를 무한히 폭주하는 듯한 임현제의 기타 톤' },
-          { track: 'GAEKKUM', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/Y3uhLcfwZ9E?si=cc8JA4Qrq6S3FBY5', desc: '사이키델릭한 몽환성과 개러지 펑크의 하드함이 폭발적으로 충돌하는 트랙' },
-          { track: '너만 없으면', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/dXvpR3md7cY?si=9p4LAgS--1rx-iGb', desc: '중독성 강한 가사와 전일준의 밀도 높은 정통 드럼 비트가 짜릿한 추천곡' },
-          { track: '꾸부렁할머니', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/-hSKRL2kLeQ?si=QCIGqcLas4o9o46r', desc: '전래동화 모티브를 현대식 헤비 개러지 사이키델릭으로 뒤틀어버린 수작' }
+          { track: '12가지말들', title: '12가지 말들', year: '2023', pick: 'public', link: 'https://youtu.be/oq9GI8GtEl0?si=EkuLti0N2V05DzgK', desc: '리드미컬한 지윤해의 보이스와 묵직한 베이스 전개가 돋보이는 곡', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' },
+          { track: 'BABY', title: '12가지 말들', year: '2023', pick: 'public', link: 'https://youtu.be/BFx0e32SG44?si=rwkcgmhkngh3dsbx', desc: '거친 라이브 클럽의 공기가 그대로 느껴지는 거침없는 합주', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' },
+          { track: '밤의 달리기', title: '12가지 말들', year: '2023', pick: 'jiwon', link: 'https://youtu.be/jlcexgj7sAs?si=rPQu48j3vR8hsAM6', desc: '어두운 야간 도로를 무한히 폭주하는 듯한 임현제의 기타 톤', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' },
+          { track: 'GAEKKUM', title: '12가지 말들', year: '2023', pick: 'jiwon', link: 'https://youtu.be/Y3uhLcfwZ9E?si=cc8JA4Qrq6S3FBY5', desc: '사이키델릭한 몽환성과 개러지 펑크의 하드함이 폭발적으로 충돌하는 트랙', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' },
+          { track: '너만 없으면', title: '12가지 말들', year: '2023', pick: 'jiwon', link: 'https://youtu.be/dXvpR3md7cY?si=9p4LAgS--1rx-iGb', desc: '중독성 강한 가사와 전일준의 밀도 높은 정통 드럼 비트가 짜릿한 추천곡', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' },
+          { track: '꾸부렁할머니', title: '12가지 말들', year: '2023', pick: 'jiwon', link: 'https://youtu.be/-hSKRL2kLeQ?si=QCIGqcLas4o9o46r', desc: '전래동화 모티브를 현대식 헤비 개러지 사이키델릭으로 뒤틀어버린 수작', cover: 'https://i.namu.wiki/i/W2BYFhdBM3XgBqobvHk6Ns6zO2mDdoHIsChqjxL_30SN0WKkhiQ1NIAddOQYvx_-gPmYmU0zE6faLKr6JYetw_wxn7SP4NKjCw16htM4nwT5arzkbNjYlsE8Q75EfN6yL5uJIVZ3cv0b2vHl76BJdw.webp' }
         ]
       },
       'sultan': {
@@ -587,12 +624,12 @@
           { name: '홍기', role: '기타', img: 'https://i.namu.wiki/i/rbbrTVGiYhs1TsWhambfmesivTPQlSFiHuBoY8CotfxeQAUHbClVaegOA_sKAR_RZgEnRur6LofwGe6N9ors6t1haQpIplK8BCgcTWEBZGk6hdbAV_3L-b-osqZ-EhHR7klQZpR-zc46m937_jpDsQ.webp' }
         ],
         albums: [
-          { track: '탱탱볼', title: 'Single', year: '2014', pick: 'public', link: 'https://youtu.be/3lVuCE_9DJo?si=B5Ro_jcCVO4K7PpH', desc: '한 번 들으면 귀에서 떠나지 않는 미친 신스 리프와 보컬 바운스' },
-          { track: 'Shining Road', title: 'Aliens', year: '2018', pick: 'public', link: 'https://youtu.be/05BWsYqMiYE?si=XNloB2jCayGHjzkO', desc: '세련된 모던 시티팝의 테두리를 절묘하게 얹은 뉴트로 그루브' },
-          { track: '의심스러워', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/A3ZkXaQ84Wo?si=kUIqmt5yLgdjLvJQ', desc: '술탄의 정체성을 전 세계에 알린 초절정 브라스 댄스 앤썸' },
-          { track: '파워 오브 오일', title: 'Single', year: '2015', pick: 'jiwon', link: 'https://youtu.be/XpmU1-TGS2E?si=hgEPnJjzPmziCRIK', desc: '중동 석유 부자의 위트를 정통 펑크 리듬에 담아낸 어깨 들썩용 명곡' },
-          { track: '요술왕자', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/JOSmr7L2P18?si=Uj8nnWI_lg_ISKOa', desc: '가사 텍스트의 유치한 매력과 가창의 천재성이 어우러진 복고의 극치' },
-          { track: '버터플라이', title: 'Aliens', year: '2018', pick: 'jiwon', link: 'https://youtu.be/w8lDxsSY_yE?si=aUnn-H96fbgKYJ_y', desc: '슬로우 템포 소울 사운드의 우아함이 귀를 편안하게 감싸주는 숨은 필청 트랙' }
+          { track: '탱탱볼', title: 'Single', year: '2014', pick: 'public', link: 'https://youtu.be/3lVuCE_9DJo?si=B5Ro_jcCVO4K7PpH', desc: '한 번 들으면 귀에서 떠나지 않는 미친 신스 리프와 보컬 바운스', cover: 'https://i.namu.wiki/i/rfWpl0uHPEkWNaooqRZRR5aawAueq7H63S7sYNnFYNG81Asxv5af1CNQAwnqYO27AotTdqXzqu_ANAMakMX8LFsZZkgMsYbrL8TJOBDcvrPZFczNSmN85IuILao7qM9buRLqEmRZbC_4UGXz02QJWA.webp' },
+          { track: 'Shining Road', title: 'Aliens', year: '2018', pick: 'public', link: 'https://youtu.be/05BWsYqMiYE?si=XNloB2jCayGHjzkO', desc: '세련된 모던 시티팝의 테두리를 절묘하게 얹은 뉴트로 그루브', cover: 'https://i.namu.wiki/i/st4vT1j76vp1BXfoaRzikHR3Tn0k_j-OYrX--FCt9ZRZa7Xhf2L5GEKynMb3E4oqxfej5DPnPHeJtnwPeO1EkFw7FIRexZneb-5iWTYK8cE2mFDHR7c1_PE0AtQpfoBSTG2NCRRCRK9QxeJ12TspkQ.webp' },
+          { track: '의심스러워', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/A3ZkXaQ84Wo?si=kUIqmt5yLgdjLvJQ', desc: '술탄의 정체성을 전 세계에 알린 초절정 브라스 댄스 앤썸', cover: 'https://i.namu.wiki/i/AZ53lx13CyGOv_oHrJ5wSW6vtBFgea1OM6YpU6uWXvDTDiFI3cV_ieuaDqBt0SkjSI47RQGq1_CpHCIZ0VhEtSw6zatzbLyYjjkuks8UT1xBfMbkrSECEW9tMB2jPmatMI9lOCL74n_VRF3GHVgWiA.webp' },
+          { track: '파워 오브 오일', title: 'The Golden Age', year: '2015', pick: 'jiwon', link: 'https://youtu.be/XpmU1-TGS2E?si=hgEPnJjzPmziCRIK', desc: '중동 석유 부자의 위트를 정통 펑크 리듬에 담아낸 어깨 들썩용 명곡', cover: 'https://i.namu.wiki/i/AZ53lx13CyGOv_oHrJ5wSW6vtBFgea1OM6YpU6uWXvDTDiFI3cV_ieuaDqBt0SkjSI47RQGq1_CpHCIZ0VhEtSw6zatzbLyYjjkuks8UT1xBfMbkrSECEW9tMB2jPmatMI9lOCL74n_VRF3GHVgWiA.webp' },
+          { track: '요술왕자', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/JOSmr7L2P18?si=Uj8nnWI_lg_ISKOa', desc: '가사 텍스트의 유치한 매력과 가창의 천재성이 어우러진 복고의 극치', cover: 'https://i.namu.wiki/i/AZ53lx13CyGOv_oHrJ5wSW6vtBFgea1OM6YpU6uWXvDTDiFI3cV_ieuaDqBt0SkjSI47RQGq1_CpHCIZ0VhEtSw6zatzbLyYjjkuks8UT1xBfMbkrSECEW9tMB2jPmatMI9lOCL74n_VRF3GHVgWiA.webp' },
+          { track: '버터플라이', title: 'The Golden Age', year: '2018', pick: 'jiwon', link: 'https://youtu.be/w8lDxsSY_yE?si=aUnn-H96fbgKYJ_y', desc: '슬로우 템포 소울 사운드의 우아함이 귀를 편안하게 감싸주는 숨은 필청 트랙', cover: 'https://i.namu.wiki/i/AZ53lx13CyGOv_oHrJ5wSW6vtBFgea1OM6YpU6uWXvDTDiFI3cV_ieuaDqBt0SkjSI47RQGq1_CpHCIZ0VhEtSw6zatzbLyYjjkuks8UT1xBfMbkrSECEW9tMB2jPmatMI9lOCL74n_VRF3GHVgWiA.webp' }
         ]
       },
       'black-skirts': {
@@ -607,12 +644,12 @@
           { name: '조휴일', role: '프런트맨 / 보컬 / 멀티악기 세션 총괄', img: 'https://i.namu.wiki/i/F8hLbgcUTic8su-TvTRUc4lglxvbOACpDPfuussst2nOVfI0-mXWyJWnOXHGG0iqy24i2QgTwtIR3A-2k3xY9U8zITFIGMs46p52OFXh-FjwhPQo4WWkpxb9WWCy2ARj7necdYnuaEGmIlDDTYNsRQ.webp' }
         ],
         albums: [
-          { track: 'EVERYTHING', title: 'TEAM BABY', year: '2017', pick: 'public', link: 'https://youtu.be/K4giYflGxAY?si=7bY9f-A-FEx8xYaP', desc: '이 세상 그 어떤 단어로도 다 채우지 못할 올타임 세레나데' },
-          { track: 'Antifreeze', title: '201', year: '2008', pick: 'public', link: 'https://youtu.be/ZOx12VfIg0g?si=Xmz0qgsnyb6mpY16', desc: '세상이 꽁꽁 얼어붙어 종말이 와도 우리는 춤을 출 거라는 찬가' },
-          { track: '기다린만큼, 더', title: '또 오해영 OST', year: '2016', pick: 'public', link: 'https://youtu.be/uG2se-8-BzE?si=RNMzc5D9cSjyTi49', desc: '쓸쓸한 어쿠스틱 스트링 위에 절절한 그리움을 채운 대중적 메가히트곡' },
-          { track: 'Friends in bed', title: 'THIRSTY', year: '2019', pick: 'jiwon', link: 'https://youtu.be/unkWxF85Dp4?si=WT1JQPhM4uB8Ki3s', desc: '몽환적인 베드룸 인디팝의 질감을 영문 가사로 아주 세련되게 채운 곡' },
-          { track: '상수역', title: 'Single', year: '2017', pick: 'jiwon', link: 'https://youtu.be/3b6GhIprBdM?si=MxhYJurWQ0m2Qtgc', desc: '특정 공간이 주는 아련함과 낭만적인 밤공기를 스케치하듯 노래한 명작' },
-          { track: '한시 오분', title: 'TEAM BABY', year: '2017', pick: 'jiwon', link: 'https://youtu.be/vFXmR5wJY0w?si=w4WITP7xWTUEMsv5', desc: '시계 바늘이 멈춰 선 듯 흐르는 조휴일표 감성 코드의 정점 트랙' }
+          { track: 'EVERYTHING', title: 'TEAM BABY', year: '2017', pick: 'public', link: 'https://youtu.be/K4giYflGxAY?si=7bY9f-A-FEx8xYaP', desc: '이 세상 그 어떤 단어로도 다 채우지 못할 올타임 세레나데', cover: 'https://i.namu.wiki/i/Cs5e2QX2LIe4bfy81TqQAhCirFzm_XoI4IxRvXhlFGQdxaYV-ecb67WgZ8YWpjTUuIS21sbw3YjP8VgIeN72Q-a-yGqe7A6iUj-bD9BsRDYX_ZLdhnfLBR58i2Vr7wc-b_XYLuSmQ5LrHPD6otenIg.webp' },
+          { track: 'Antifreeze', title: '201', year: '2008', pick: 'public', link: 'https://youtu.be/ZOx12VfIg0g?si=Xmz0qgsnyb6mpY16', desc: '세상이 꽁꽁 얼어붙어 종말이 와도 우리는 춤을 출 거라는 찬가', cover: 'https://i.namu.wiki/i/HRPASgsBYkeT7psEGW2alLZZemwaGmp-B98xLjsrnRvNYnoZSiFtRwhenU0AaJwnUsuYhXd91_-rLaf7IvsQjk6kjYCFQDc92mDHs6cNkDdiJwzwgzSDbwutV8E4XNrF6t5WnBzhsWT4WnpThQEFVw.webp' },
+          { track: '기다린만큼, 더', title: '또 오해영 OST', year: '2016', pick: 'public', link: 'https://youtu.be/uG2se-8-BzE?si=RNMzc5D9cSjyTi49', desc: '쓸쓸한 어쿠스틱 스트링 위에 절절한 그리움을 채운 대중적 메가히트곡', cover: 'https://i.namu.wiki/i/qi6OrfKvCsC36e7IPujboJye9xk0SEo-dmeNxb1UHWqU3nbcQ4FzWsyjT_XbPVNA8fW2Z1q_8mvuQNlNbt_ZI48H8lUS9fO3DW5oN4qnZ1qTcokQxZBJo_GfNB7y6J423807ae00d-ESJv3bNROzfg.webp' },
+          { track: 'Friends in bed', title: 'TEEN TROUBLES', year: '2019', pick: 'jiwon', link: 'https://youtu.be/unkWxF85Dp4?si=WT1JQPhM4uB8Ki3s', desc: '몽환적인 인디팝의 질감을 영문 가사로 아주 세련되게 채운 곡', cover: 'https://i.namu.wiki/i/o45MFaW8CkCSsPnUIMyle6iMYW0TWvolEXCeqb69kcuaBjSn8Txglu7Rp1r5irJvZ6l9r3Mt-MunirQIpXxzgm_A_wI6sHOQHcVKR9G0fLOgJofGVB5DqbBrHNsxENQzyU6mDH6y5YSoW873bK5nUA.webp' },
+          { track: '상수역', title: 'THIRSTY', year: '2019', pick: 'jiwon', link: 'https://youtu.be/3b6GhIprBdM?si=MxhYJurWQ0m2Qtgc', desc: '특정 공간이 주는 아련함과 낭만적인 밤공기를 스케치하듯 노래한 명작', cover: 'https://image.bugsm.co.kr/album/images/500/202279/20227918.jpg' },
+          { track: '한시 오분', title: 'TEAM BABY', year: '2017', pick: 'jiwon', link: 'https://youtu.be/vFXmR5wJY0w?si=w4WITP7xWTUEMsv5', desc: '시계 바늘이 멈춰 선 듯 흐르는 조휴일표 감성 코드의 정점 트랙', cover: 'https://i.namu.wiki/i/Cs5e2QX2LIe4bfy81TqQAhCirFzm_XoI4IxRvXhlFGQdxaYV-ecb67WgZ8YWpjTUuIS21sbw3YjP8VgIeN72Q-a-yGqe7A6iUj-bD9BsRDYX_ZLdhnfLBR58i2Vr7wc-b_XYLuSmQ5LrHPD6otenIg.webp' }
         ]
       }
     };
@@ -645,14 +682,15 @@
       currentArtistId: null,
       selectedTrack: null,
       isPlaying: false,
-      theme: 'dark' // Default theme setting
+      theme: 'dark',
+      accentColor: 'rgba(236, 72, 153, 0.35)'
     };
 
     // Gentle drifting background particles system
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleCount = 35; // Lightweight, low-overhead subtle floating dots
+    const particleCount = 35;
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -669,9 +707,9 @@
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = canvas.height + 15;
-        this.size = Math.random() * 1.5 + 0.8; // Very fine dots
-        this.speedY = -(Math.random() * 0.18 + 0.08); // Rising extremely slowly
-        this.speedX = (Math.random() * 0.12 - 0.06); // Swaying gently left/right
+        this.size = Math.random() * 1.8 + 0.8;
+        this.speedY = -(Math.random() * 0.18 + 0.08);
+        this.speedX = (Math.random() * 0.12 - 0.06);
         this.alpha = Math.random() * 0.45 + 0.1;
       }
       update() {
@@ -685,12 +723,11 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         const isDark = document.documentElement.classList.contains('dark');
+        
         if (isDark) {
-          // Subtle warm pinkish-white embers
-          ctx.fillStyle = `rgba(244, 114, 182, ${this.alpha * 0.3})`;
+          ctx.fillStyle = state.accentColor.replace('0.35', (this.alpha * 0.55).toFixed(2));
         } else {
-          // Cozy warm slate floating specs
-          ctx.fillStyle = `rgba(15, 23, 42, ${this.alpha * 0.12})`;
+          ctx.fillStyle = state.accentColor.replace('0.35', (this.alpha * 0.25).toFixed(2));
         }
         ctx.fill();
       }
@@ -778,7 +815,6 @@
     function showQuizResult() {
       document.getElementById('quiz-play-box').classList.add('hidden');
       document.getElementById('quiz-result-box').classList.remove('hidden');
-      
       document.getElementById('quiz-final-score').textContent = `${quizScore}점`;
       
       let badge = "🥉 방구석 뉴비 리스너";
@@ -801,14 +837,12 @@
       const contentArea = document.getElementById('comment-content');
       contentArea.value = `[인디력 테스트 완료] 저의 리스너 칭호는 [${badge}] 입니다! ⚡ 박지원님의 취향 완벽 동화 완료!`;
       
-      // select standard emoji '🏆' (or सीडी)
       selectCommentEmoji('💿', document.querySelector('.emoji-btn:last-child'));
-      
       document.getElementById('comment-form').scrollIntoView({ behavior: 'smooth' });
       showToast("📝 방명록 입력란에 내 칭호가 자동으로 채워졌습니다! 작성해 보세요.");
     }
 
-    // Guestbook Comments Management
+    // Guestbook Comments Management with Heart likes
     let selectedCommentEmoji = '🎸';
     let activeCommentIdToDelete = null;
 
@@ -823,8 +857,7 @@
     }
 
     function loadComments() {
-      const stored = localStorage.getItem('mb_comments');
-      // Romantic pre-loaded dummy guestbook comments
+      const stored = localStorage.getItem('mb_comments_v2');
       const defaultComments = [
         {
           id: '1',
@@ -832,7 +865,8 @@
           emoji: '🎸',
           text: '박지원 님의 밴드 아카이브 덕분에 봉제인간 입덕했습니다... 밤의 달리기 들으면서 오늘 야근 버텨요! ⚡',
           timestamp: '2026.07.11 14:32',
-          pw: '1234'
+          pw: '1234',
+          likes: 5
         },
         {
           id: '2',
@@ -840,13 +874,14 @@
           emoji: '💿',
           text: '검정치마의 한시 오분, 역시 올타임 레전드네요. 이곳 공간 인테리어도 너무 감각적이에요!',
           timestamp: '2026.07.13 09:15',
-          pw: '1234'
+          pw: '1234',
+          likes: 12
         }
       ];
       
       const list = stored ? JSON.parse(stored) : defaultComments;
       if (!stored) {
-        localStorage.setItem('mb_comments', JSON.stringify(defaultComments));
+        localStorage.setItem('mb_comments_v2', JSON.stringify(defaultComments));
       }
       renderComments(list);
     }
@@ -864,10 +899,9 @@
         return;
       }
 
-      // Render chronologically descending
       list.slice().reverse().forEach(c => {
         const item = document.createElement('div');
-        item.className = 'glass rounded-2xl p-4 sm:p-5 flex gap-3.5 items-start border border-neutral-200/50 dark:border-white/5 hover:scale-[1.005] hover:shadow-lg transition-all duration-300';
+        item.className = 'glass rounded-2xl p-4 sm:p-5 flex gap-3.5 items-start border border-neutral-200/50 dark:border-white/5 hover:scale-[1.005] hover:shadow-lg transition-all duration-300 relative overflow-hidden';
         item.innerHTML = `
           <div class="text-2.5xl p-3 bg-neutral-200/50 dark:bg-white/5 rounded-2xl shrink-0 select-none shadow-inner">${c.emoji}</div>
           <div class="flex-grow min-w-0 space-y-1.5">
@@ -876,6 +910,11 @@
               <span class="text-[10px] text-neutral-400 shrink-0">${c.timestamp}</span>
             </div>
             <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed break-words">${c.text}</p>
+            <div class="pt-1 flex items-center gap-2">
+              <button onclick="likeComment('${c.id}', this, event)" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 text-xs font-semibold transition active:scale-90 border border-pink-500/20">
+                <i data-lucide="heart" class="w-3.5 h-3.5 fill-pink-500"></i> <span class="like-count">${c.likes || 0}</span>
+              </button>
+            </div>
           </div>
           <button onclick="openDeleteModal('${c.id}')" class="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition shrink-0" title="삭제">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -884,6 +923,31 @@
         container.appendChild(item);
       });
       lucide.createIcons();
+    }
+
+    function likeComment(id, element, event) {
+      const rect = element.getBoundingClientRect();
+      for (let i = 0; i < 3; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = `${event.clientX - rect.left + (Math.random() * 30 - 15)}px`;
+        heart.style.top = `${event.clientY - rect.top - 20}px`;
+        heart.style.animationDelay = `${i * 0.1}s`;
+        element.parentElement.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+
+      const stored = localStorage.getItem('mb_comments_v2');
+      if (!stored) return;
+
+      let list = JSON.parse(stored);
+      const comment = list.find(c => c.id === id);
+      if (comment) {
+        comment.likes = (comment.likes || 0) + 1;
+        localStorage.setItem('mb_comments_v2', JSON.stringify(list));
+        element.querySelector('.like-count').textContent = comment.likes;
+      }
     }
 
     function handleCommentSubmit(event) {
@@ -907,21 +971,20 @@
         emoji: selectedCommentEmoji,
         text,
         timestamp,
-        pw
+        pw,
+        likes: 0
       };
 
-      const stored = localStorage.getItem('mb_comments');
+      const stored = localStorage.getItem('mb_comments_v2');
       let list = stored ? JSON.parse(stored) : [];
       list.push(newComment);
-      localStorage.setItem('mb_comments', JSON.stringify(list));
+      localStorage.setItem('mb_comments_v2', JSON.stringify(list));
 
       renderComments(list);
 
-      // Input Reset
       nickInput.value = '';
       pwInput.value = '';
       contentInput.value = '';
-      // Reset Emoji Style Selection to default First Emoji
       selectCommentEmoji('🎸', document.getElementById('emoji-default-btn'));
       showToast('📝 방명록 글이 성공적으로 게재되었습니다!');
     }
@@ -944,7 +1007,7 @@
         return;
       }
 
-      const stored = localStorage.getItem('mb_comments');
+      const stored = localStorage.getItem('mb_comments_v2');
       if (!stored) return;
 
       let list = JSON.parse(stored);
@@ -952,7 +1015,7 @@
 
       if (target && target.pw === enteredPw) {
         list = list.filter(c => c.id !== activeCommentIdToDelete);
-        localStorage.setItem('mb_comments', JSON.stringify(list));
+        localStorage.setItem('mb_comments_v2', JSON.stringify(list));
         renderComments(list);
         closeDeleteModal();
         showToast('🗑️ 정상적으로 코멘트가 파기되었습니다.');
@@ -986,7 +1049,6 @@
         localStorage.setItem('theme', 'dark');
         showToast('🌙 다크 모드로 전환되었습니다.');
       }
-      // Re-trigger icon updates
       setTimeout(() => { lucide.createIcons(); }, 50);
     }
 
@@ -1001,17 +1063,27 @@
       
       const homePage = document.getElementById('home-page');
       const detailPage = document.getElementById('detail-page');
+      const aura = document.getElementById('bg-aura');
 
       if (page === 'home') {
         homePage.classList.remove('hidden');
         detailPage.classList.add('hidden');
         dismissMobilePlayer();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        state.accentColor = 'rgba(236, 72, 153, 0.35)';
+        aura.style.background = `radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.2) 0%, transparent 70%)`;
       } else if (page === 'artist') {
         homePage.classList.add('hidden');
         detailPage.classList.remove('hidden');
         renderArtistDetail(artistId);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        const data = ARTISTS[artistId];
+        if (data) {
+          state.accentColor = data.glowFrom;
+          aura.style.background = `radial-gradient(circle at 50% 50%, ${data.glowFrom.replace('0.35', '0.25')} 0%, transparent 75%)`;
+        }
       }
     }
 
@@ -1056,14 +1128,16 @@
         memberContainer.appendChild(item);
       });
 
-      // Render Tracks
+      // Render Tracks - Links specifically with individual track album cover art
       const albumContainer = document.getElementById('artist-albums');
       albumContainer.innerHTML = '';
 
       data.albums.forEach((album, idx) => {
         const item = document.createElement('div');
         item.className = 'flex flex-row items-center justify-between p-3 sm:p-3.5 rounded-xl bg-neutral-200/40 dark:bg-white/5 border border-neutral-300/50 dark:border-white/5 hover:bg-neutral-300/40 dark:hover:bg-white/10 hover:border-neutral-400/50 dark:hover:border-white/15 transition cursor-pointer gap-2 sm:gap-4';
-        item.onclick = () => selectTrack(album.track, data.name, album.link, album.desc, data.mainImg);
+        
+        // Pass the album.cover as the fifth argument!
+        item.onclick = () => selectTrack(album.track, data.name, album.link, album.desc, album.cover);
 
         const badgeHtml = album.pick === 'public' 
           ? `<span class="px-1.5 sm:px-2 py-0.5 rounded text-[8px] sm:text-[10px] font-bold bg-red-600/10 dark:bg-red-600/20 text-red-600 dark:text-red-400 border border-red-500/20 dark:border-red-500/30 shrink-0">대중 픽 🔴</span>`
@@ -1091,16 +1165,14 @@
 
       lucide.createIcons();
 
-      // Load initial track as standby without popup
       if (data.albums.length > 0) {
-        setPlayerTrack(data.albums[0].track, data.name, data.albums[0].link, data.albums[0].desc, data.mainImg);
+        setPlayerTrack(data.albums[0].track, data.name, data.albums[0].link, data.albums[0].desc, data.albums[0].cover);
       }
     }
 
     function setPlayerTrack(track, artistName, link, desc, coverImg) {
       state.selectedTrack = { track, artistName, link, desc };
       
-      // Standard Panel
       document.getElementById('player-title').textContent = track;
       document.getElementById('player-artist').textContent = artistName;
       document.getElementById('curator-comment').innerHTML = `"${desc}"`;
@@ -1108,14 +1180,14 @@
       const cov = document.getElementById('player-cover-img');
       cov.src = coverImg;
       cov.classList.remove('hidden');
-      cov.onerror = () => handleImageError(cov, 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=100');
+      cov.onerror = () => handleImageError(cov, 'https://placehold.co/150x150/eab308/ffffff?text=Disc');
 
       const btn = document.getElementById('youtube-direct-btn');
       btn.href = link;
 
       state.isPlaying = false;
       document.getElementById('equalizer').classList.add('hidden');
-      document.getElementById('player-disk').classList.remove('animate-spin');
+      document.getElementById('player-disk').classList.remove('spin-vinyl-active');
     }
 
     function selectTrack(track, artistName, link, desc, coverImg) {
@@ -1124,10 +1196,10 @@
       state.isPlaying = true;
       document.getElementById('equalizer').classList.remove('hidden');
       
+      // Activating Desktop custom hardware spin transition flawlessly
       const disk = document.getElementById('player-disk');
-      disk.classList.add('animate-spin');
-      disk.style.animationDuration = '12s';
-      
+      disk.classList.add('spin-vinyl-active');
+
       // Trigger Mobile Sticky Bottom Player Panel smoothly
       const mobPlayer = document.getElementById('mobile-sticky-player');
       document.getElementById('mobile-player-title').textContent = track;
@@ -1135,7 +1207,7 @@
       
       const mobCover = document.getElementById('mobile-player-cover');
       mobCover.src = coverImg;
-      mobCover.onerror = () => handleImageError(mobCover, 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=100');
+      mobCover.onerror = () => handleImageError(mobCover, 'https://placehold.co/100x100/ec4899/ffffff?text=Disc');
 
       document.getElementById('mobile-youtube-btn').href = link;
 
@@ -1143,12 +1215,11 @@
       mobPlayer.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
       mobPlayer.classList.add('translate-y-0', 'opacity-100');
       
-      // Mobile disc rotation
+      // Activating Mobile custom hardware spin transition flawlessly
       const mobDisk = document.getElementById('mobile-player-disk');
-      mobDisk.classList.add('animate-spin');
-      mobDisk.style.animationDuration = '8s';
+      mobDisk.classList.add('spin-vinyl-active');
 
-      showToast(`🎵 "${track}" 선택됨! 아래 플레이어에서 재생을 터치해 보세요.`);
+      showToast(`🎵 "${track}" 선택 완료! YouTube 바로가기로 감상해보세요.`);
     }
 
     function dismissMobilePlayer() {
@@ -1167,7 +1238,7 @@
       
       setTimeout(() => {
         navigateTo('artist', randomArtistId);
-        selectTrack(randomTrack.track, artist.name, randomTrack.link, randomTrack.desc, artist.mainImg);
+        selectTrack(randomTrack.track, artist.name, randomTrack.link, randomTrack.desc, randomTrack.cover);
       }, 400);
     }
 
@@ -1239,7 +1310,6 @@
       document.getElementById('quiz-modal').classList.add('hidden');
     }
 
-    // Initialize triggers
     window.onload = function() {
       initializeTheme();
       initParticles();
