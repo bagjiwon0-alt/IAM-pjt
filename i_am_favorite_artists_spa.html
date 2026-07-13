@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I AM - My Favorite Bands</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Outfit', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px rgba(255, 255, 255, 0.08) solid;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #fef08a 0%, #f472b6 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @keyframes bounce {
+      0%, 100% { height: 4px; }
+      50% { height: 24px; }
+    }
+    .eq-bar {
+      animation: bounce 0.8s ease-in-out infinite;
+    }
+    .eq-bar:nth-child(2) { animation-delay: 0.15s; }
+    .eq-bar:nth-child(3) { animation-delay: 0.3s; }
+    .eq-bar:nth-child(4) { animation-delay: 0.45s; }
+  </style>
+</head>
+<body class="bg-neutral-950 text-neutral-100 min-h-screen selection:bg-pink-500 selection:text-white flex flex-col justify-between">
+
+  <!-- Header & Navigation -->
+  <header class="sticky top-0 z-40 w-full glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#" onclick="navigateTo('home')" class="flex items-center gap-2 font-bold text-xl tracking-wider hover:opacity-80 transition">
+        <i data-lucide="disc" class="w-6 h-6 text-pink-500 animate-spin" style="animation-duration: 4s;"></i>
+        <span class="text-gradient">MY BEATS</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-neutral-300">
+        <a href="#home" onclick="navigateTo('home')" class="hover:text-pink-400 transition">Home</a>
+        <a href="#artists" onclick="navigateTo('home'); document.getElementById('artists-section').scrollIntoView();" class="hover:text-pink-400 transition">Artists</a>
+        <a href="#recommend" onclick="openQuiz()" class="hover:text-pink-400 transition">Band Finder</a>
+      </nav>
+      <button onclick="openQuiz()" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-pink-600 hover:bg-pink-500 text-xs font-bold transition shadow-lg shadow-pink-600/20">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 밴드 추천 받기
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main id="app-content" class="flex-grow max-w-7xl mx-auto px-6 py-12 w-full">
+    
+    <!-- PAGE 1: HOME -->
+    <section id="home-page" class="space-y-16">
+      <div class="text-center max-w-3xl mx-auto space-y-6 py-8">
+        <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-pink-400 border border-white/10 font-mono tracking-wider uppercase">Curator Room</span>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          내가 좋아하는 밴드, <span class="text-gradient">들어볼래?</span>
+        </h1>
+        <p class="text-neutral-400 text-sm md:text-base leading-relaxed">
+          박지원의 음악 아카이브에 오신 것을 환영합니다! 제가 매일같이 귀에 달고 사는, 가장 애정하는 네 팀의 밴드를 소개할게요. 대중들의 귀를 사로잡은 메가 히트곡부터 저 박지원이 나만 알고 싶어 숨겨두었던 최애 트랙(지원 픽)까지 알차게 담았습니다. 아래 카드를 눌러 저의 취향 가득한 음악 세계를 맘껏 탐색해 보세요!
+        </p>
+      </div>
+
+      <!-- Grid of 4 Artists (실제 사진 연동 완료) -->
+      <div id="artists-section" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
+        <!-- Card 1: 장기하와 얼굴들 -->
+        <div onclick="navigateTo('artist', 'chang-kiha')" class="group cursor-pointer glass rounded-2xl overflow-hidden hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="h-52 relative overflow-hidden bg-neutral-900">
+            <img src="https://i.namu.wiki/i/5WlJ-aKIjQO5C70zmxy6Myfq-WSs5t5RTtluqoM-hy_IxMpLbTH0pPZ_f8i6MhtwCnPDbAXJp0e4ZfBH6r1C1A.webp" alt="장기하와 얼굴들" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 grayscale group-hover:grayscale-0">
+            <span class="absolute top-4 right-4 bg-amber-500 text-neutral-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Legend</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <p class="text-[11px] text-amber-400 font-bold tracking-wider">RETRO PSYCHEDELIC</p>
+            <h3 class="text-xl font-bold group-hover:text-amber-400 transition">장기하와 얼굴들</h3>
+            <p class="text-xs text-neutral-400 line-clamp-2">한국어 말맛의 극치와 빈티지 록의 조화, 인디 역사에 한 획을 그은 전설.</p>
+          </div>
+        </div>
+
+        <!-- Card 2: 봉제인간 -->
+        <div onclick="navigateTo('artist', 'bongjeingan')" class="group cursor-pointer glass rounded-2xl overflow-hidden hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="h-52 relative overflow-hidden bg-neutral-900">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz4HVJdMAiDkcYvQNXZrIabkzSNVv4dzavIsqSlLYddg&s" alt="봉제인간" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 grayscale group-hover:grayscale-0">
+            <span class="absolute top-4 right-4 bg-red-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Raw Rock</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <p class="text-[11px] text-red-400 font-bold tracking-wider">GARAGE PSYCHEDELIC</p>
+            <h3 class="text-xl font-bold group-hover:text-red-400 transition">봉제인간</h3>
+            <p class="text-xs text-neutral-400 line-clamp-2">혁오, 술탄, 장얼 출신 인디 어벤져스가 뿜어내는 가공되지 않은 날것의 강력한 충격.</p>
+          </div>
+        </div>
+
+        <!-- Card 3: 술탄 오브 더 디스코 -->
+        <div onclick="navigateTo('artist', 'sultan')" class="group cursor-pointer glass rounded-2xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="h-52 relative overflow-hidden bg-neutral-900">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeHKcXNwbM3yWIN92Z4o-9y3rPK2Aeb377VhPYsu1uyw&s=10" alt="술탄 오브 더 디스코" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 grayscale group-hover:grayscale-0">
+            <span class="absolute top-4 right-4 bg-purple-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Disco</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <p class="text-[11px] text-purple-400 font-bold tracking-wider">VINTAGE SOUL DANCE</p>
+            <h3 class="text-xl font-bold group-hover:text-purple-400 transition">술탄 오브 더 디스코</h3>
+            <p class="text-xs text-neutral-400 line-clamp-2">무릎을 가만히 두지 못하게 만드는 국내 유일무이 정통 황금 디스코 그루브 군단.</p>
+          </div>
+        </div>
+
+        <!-- Card 4: 검정치마 -->
+        <div onclick="navigateTo('artist', 'black-skirts')" class="group cursor-pointer glass rounded-2xl overflow-hidden hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300 transform hover:-translate-y-2">
+          <div class="h-52 relative overflow-hidden bg-neutral-900">
+            <img src="https://i.namu.wiki/i/F8hLbgcUTic8su-TvTRUc4lglxvbOACpDPfuussst2nOVfI0-mXWyJWnOXHGG0iqy24i2QgTwtIR3A-2k3xY9U8zITFIGMs46p52OFXh-FjwhPQo4WWkpxb9WWCy2ARj7necdYnuaEGmIlDDTYNsRQ.webp" alt="검정치마" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 grayscale group-hover:grayscale-0">
+            <span class="absolute top-4 right-4 bg-pink-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Indie Pop</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <p class="text-[11px] text-pink-400 font-bold tracking-wider">MELANCHOLIC POETRY</p>
+            <h3 class="text-xl font-bold group-hover:text-pink-400 transition">검정치마</h3>
+            <p class="text-xs text-neutral-400 line-clamp-2">조휴일이 써 내려간 달콤하고 쓰라린 우리 모두의 불완전한 청춘의 파편들.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini Random Match Section -->
+      <div class="glass rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 mt-12">
+        <div class="space-y-3 max-w-xl text-center md:text-left">
+          <h2 class="text-xl md:text-2xl font-bold">지금 어떤 밴드의 무드가 필요하신가요?</h2>
+          <p class="text-neutral-400 text-xs md:text-sm">
+            기분에 따라 랜덤하게 트랙을 추천받아 즉시 유튜브 고화질 음원으로 매칭해 드립니다.
+          </p>
+        </div>
+        <button onclick="getRandomTrack()" class="px-6 py-3 bg-white hover:bg-neutral-200 text-neutral-950 font-bold rounded-xl transition flex items-center justify-center gap-2 text-sm">
+          <i data-lucide="shuffle" class="w-4 h-4 text-neutral-900"></i> 아무 곡이나 골라줘!
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGE 2: ARTIST DETAIL -->
+    <section id="detail-page" class="hidden space-y-12">
+      <button onclick="navigateTo('home')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white transition text-xs font-semibold">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> 메인으로 돌아가기
+      </button>
+
+      <!-- Jumbotron -->
+      <div id="artist-hero" class="relative rounded-3xl overflow-hidden p-6 md:p-12 flex flex-col justify-end min-h-[300px] border border-white/5">
+        <div id="artist-glow" class="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-transparent z-10"></div>
+        <div class="relative z-20 space-y-3">
+          <span id="artist-tag" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">GENRE</span>
+          <h2 id="artist-name" class="text-3xl md:text-5xl font-black text-white tracking-tight">아티스트</h2>
+          <p id="artist-one-liner" class="text-sm md:text-base text-neutral-300 max-w-2xl font-light">한 줄 슬로건</p>
+        </div>
+      </div>
+
+      <!-- Info Contents & Listening Room Layout Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Blocks (Bio, Members, Tracks) -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- 아티스트 소개 (좌텍스트 우사진 레이아웃) -->
+          <div class="glass rounded-2xl p-6 md:p-8 space-y-6">
+            <h3 class="text-lg font-bold flex items-center gap-2 border-b border-white/10 pb-4">
+              <i data-lucide="bookmark-check" class="w-5 h-5 text-pink-500"></i> 아티스트 히스토리
+            </h3>
+            <div class="flex flex-col md:flex-row gap-6 items-center md:items-start">
+              <div class="flex-grow space-y-4">
+                <p id="artist-bio" class="text-neutral-300 leading-relaxed text-sm whitespace-pre-line">
+                  추후추가예정
+                </p>
+              </div>
+              <div class="w-full md:w-48 h-36 rounded-xl overflow-hidden bg-neutral-900 border border-white/10 shrink-0 shadow-xl">
+                <img id="artist-detail-img" src="" alt="아티스트 사진" class="w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+
+          <!-- 멤버 소개 섹션 (이름, 포지션, 우측 사진 레이아웃 구조화) -->
+          <div class="glass rounded-2xl p-6 md:p-8 space-y-6">
+            <h3 class="text-lg font-bold flex items-center gap-2 border-b border-white/10 pb-4">
+              <i data-lucide="users" class="w-5 h-5 text-pink-500"></i> 멤버 소개
+            </h3>
+            <div id="member-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- 디스코그래피 트랙 (대중픽/지원픽 스티커 분리 장착) -->
+          <div class="glass rounded-2xl p-6 md:p-8 space-y-6">
+            <h3 class="text-lg font-bold flex items-center gap-2 border-b border-white/10 pb-4">
+              <i data-lucide="music" class="w-5 h-5 text-pink-500"></i> 큐레이터 큐레이션 트랙
+            </h3>
+            <div id="artist-albums" class="space-y-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Safe UI Listening Room (오류 에러창 대신 완벽한 미디어 스킨) -->
+        <div class="space-y-6">
+          <div class="glass rounded-2xl p-6 sticky top-24 border border-white/10 shadow-2xl">
+            <div class="flex items-center justify-between pb-4 border-b border-white/5 mb-6">
+              <span class="text-[11px] text-neutral-400 font-bold uppercase flex items-center gap-1.5">
+                <i data-lucide="radio" class="w-4 h-4 text-pink-500"></i> LISTENING DEVICE
+              </span>
+              <div id="equalizer" class="hidden flex items-end gap-0.5 h-5">
+                <div class="w-0.5 bg-pink-500 rounded-full eq-bar"></div>
+                <div class="w-0.5 bg-pink-500 rounded-full eq-bar"></div>
+                <div class="w-0.5 bg-pink-500 rounded-full eq-bar"></div>
+                <div class="w-0.5 bg-pink-500 rounded-full eq-bar"></div>
+              </div>
+            </div>
+
+            <!-- Vinyl Player Display Canvas Concept -->
+            <div class="relative w-44 h-44 mx-auto mb-6 flex items-center justify-center group">
+              <!-- Outer Rotating Disc Shell -->
+              <div id="player-disk" class="absolute inset-0 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 border-4 border-neutral-800 shadow-2xl flex items-center justify-center transition duration-500 transform">
+                <!-- Inner Label (Shows Artist Image Frame inside Vinyl Center) -->
+                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-neutral-950 relative z-10 bg-neutral-800 flex items-center justify-center">
+                  <img id="player-cover-img" src="" alt="" class="w-full h-full object-cover opacity-60 hidden">
+                  <div class="w-3 h-3 rounded-full bg-neutral-950 absolute z-20 shadow-inner"></div>
+                </div>
+              </div>
+              <!-- Simulated Vinyl Grooves lines overlay -->
+              <div class="absolute inset-2 rounded-full border border-white/5 pointer-events-none"></div>
+              <div class="absolute inset-6 rounded-full border border-white/5 pointer-events-none"></div>
+              <div class="absolute inset-12 rounded-full border border-white/5 pointer-events-none"></div>
+            </div>
+
+            <div class="text-center space-y-1.5 mb-6">
+              <h4 id="player-title" class="font-bold text-base text-white truncate px-2">선택된 트랙 없음</h4>
+              <p id="player-artist" class="text-xs text-neutral-400">곡을 아래 리스트에서 골라주세요</p>
+            </div>
+
+            <!-- High-Contrast Clean Outlink Button -->
+            <div class="space-y-4">
+              <a id="youtube-direct-btn" href="#" target="_blank" class="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-center text-xs tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-600/10 hover:shadow-red-600/20 transition group">
+                <i data-lucide="youtube" class="w-4 h-4 group-hover:scale-110 transition"></i> YouTube에서 직접 청취하기 <i data-lucide="external-link" class="w-3 h-3 opacity-70"></i>
+              </a>
+
+              <div class="p-4 rounded-xl bg-white/5 border border-white/5">
+                <p id="curator-comment" class="text-xs text-neutral-300 italic text-center leading-relaxed">
+                  "곡을 선택하면 아티스트 공식 유튜브 채널의 고화질 스트리밍 박스로 다이렉트 연동됩니다."
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Modal 1: Quiz -->
+  <div id="quiz-modal" class="fixed inset-0 bg-neutral-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass rounded-3xl w-full max-w-md p-6 space-y-6 relative border border-white/10">
+      <button onclick="closeQuiz()" class="absolute top-5 right-5 text-neutral-400 hover:text-white transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="quiz-question-container" class="space-y-6">
+        <div class="space-y-1">
+          <span class="text-xs text-pink-400 font-bold uppercase tracking-wider">Mood Finder</span>
+          <h3 class="text-lg font-bold">지금 끌리는 사운드는 어떤 종류인가요?</h3>
+        </div>
+        <div id="quiz-options" class="space-y-2.5"></div>
+      </div>
+
+      <div id="quiz-result-container" class="hidden text-center space-y-5 py-4">
+        <div class="w-12 h-12 rounded-full bg-pink-500/20 text-pink-500 mx-auto flex items-center justify-center">
+          <i data-lucide="music-2" class="w-6 h-6"></i>
+        </div>
+        <div class="space-y-1">
+          <p class="text-[11px] text-neutral-400 uppercase tracking-wider">내 기분에 매칭된 추천 인디밴드는</p>
+          <h4 id="quiz-match-name" class="text-2xl font-black text-pink-400">장기하와 얼굴들</h4>
+        </div>
+        <p id="quiz-match-desc" class="text-xs text-neutral-300 px-2 leading-relaxed"></p>
+        <button id="quiz-go-btn" class="w-full py-2.5 text-neutral-900 font-bold rounded-xl text-xs transition">
+          탐색하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 rounded-xl bg-neutral-900 border border-pink-500/20 text-white text-xs font-semibold shadow-2xl flex items-center gap-2 z-50 transform translate-y-24 opacity-0 transition-all duration-300">
+    <i data-lucide="alert-circle" class="w-4 h-4 text-pink-500"></i>
+    <span id="toast-msg">알림</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-8 mt-12 bg-neutral-950/60">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-neutral-500">
+      <p>© 2026 MY BEATS. 내 최애 밴드 아카이브 프로젝트.</p>
+      <div class="flex items-center gap-6">
+        <span class="hover:text-neutral-400 transition">바닐라 자바스크립트 SPA</span>
+        <span class="hover:text-neutral-400 transition">Tailwind CSS UI</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DATA & SCRIPTS -->
+  <script>
+    const ARTISTS = {
+      'chang-kiha': {
+        name: '장기하와 얼굴들',
+        genre: '레트로 사이키델릭 / 포크 록',
+        tagColor: 'amber',
+        glowFrom: 'rgba(245, 158, 11, 0.35)',
+        oneLiner: '한국 대중음악 씬 전체를 뒤흔든 시대의 관찰자이자 독보적 거장 밴드',
+        mainImg: 'https://i.namu.wiki/i/5WlJ-aKIjQO5C70zmxy6Myfq-WSs5t5RTtluqoM-hy_IxMpLbTH0pPZ_f8i6MhtwCnPDbAXJp0e4ZfBH6r1C1A.webp',
+        bio: `장기하의 음악적 뿌리를 논할 때 결코 빼놓을 수 없는 한국 인디 밴드 역사의 전설적인 그룹입니다. 지극히 일상적이면서도 허를 찌르는 언어유희적 한국어 가사와 복고풍 사이키델릭/포크 록 사운드를 완벽히 혼합하여 대중음악 씬 전체를 뒤흔들었습니다.\n\n데뷔곡인 '싸구려 커피'의 메가 히트를 시작으로 '달이 차오른다, 가자', '풍문으로 들었소', 'ㅋ' 등 시대를 풍미한 명반들을 남겼으며, 2018년 5집 발매 이후 '가장 멋진 모습일 때 박수치며 헤어지겠다'는 모토 하에 아름다운 은퇴 및 각자의 솔로 활동을 선언하였습니다.`,
+        members: [
+          { name: '장기하', role: '보컬 / 작사·작곡', img: 'https://img.hankyung.com/photo/201811/01.18151646.1.jpg' },
+          { name: '전일준', role: '드럼 (봉제인간 현 멤버)', img: 'https://i.namu.wiki/i/oo3D4nZZMuSL4m-OFne9gYbukySjMnW1yUOomV9Kf4ARs1lFPQy-58E_Qm4iSjvJ2SWAyM-27pPfLxK3du1pNQ.webp' },
+          { name: '하세가와 요헤이', role: '기타 / 양평이형', img: 'https://i.namu.wiki/i/wxvmqp94jH10kwJ8gnvowRAwgkoe_Py6GuL2tf5B5GoQcF6T86DrX4PQqre8uoev4QULq-TJ6fvBIoO-dxZf3A.webp' },
+          { name: '이민기', role: '기타', img: 'https://i.namu.wiki/i/kjGpdl1G94HkxthGvi5GPrGGd_gS25EznO8JdHWmbrEinf57Z2TZT-2-yqeqDiNkjVogTpEw-d9O2BkhiHgobTbKYMrY1p9sxWtCfXtQPpV1g9AcrTLrNbfCQjK_vGTSa-6AGduD6OX_Z27sBZriVQ.webp' },
+          { name: '정중엽', role: '베이스', img: 'https://i.namu.wiki/i/190dOz9AepDLgaeAdwgX-UsqFvIQChxDeTQ4UIPgFD92La1ihOkZqQzdk99q4Gk-DODzVY7BR-PdLkO_SwUIL1q7pOc5MaZD31Vky5QdplKy4-sWfPqgKvmxMj2q6N9dmKmJXRBqAmCAnsh_YiWLbw.webp' },
+          { name: '이종민', role: '건반', img: 'https://i.namu.wiki/i/abULAjjgUPrtWnvLbzS8rWAswu5ZnJgxkRWpmkqc-N5oA243l31cVvI8CRlChCN6cNg80Ygpi4GNvz_Sj4S3ntPrN8ZBNsoOyb1UpLt42tgL1j0qZGdfBMQvQcIm9NI7-TtIhdrjq4YbJMI5l_XXCw.webp' }
+        ],
+        albums: [
+          { track: 'ㅋ', title: '내 사랑에 노련한 사람이 어디 있나요', year: '2016', pick: 'public', link: 'https://youtu.be/HvELS0EKcPw?si=adrbLEBWxp_4HP9V', desc: '모바일 시대 소통의 허무함을 유쾌한 리듬으로 저격한 명곡' },
+          { track: '싸구려 커피', title: '별일 없이 산다', year: '2009', pick: 'public', link: 'https://youtu.be/cb0V4Dc1nnE?si=WQohvtz4YPPtthpD', desc: '대한민국 인디의 흐름을 통째로 바꾼 상징적인 읊조림' },
+          { track: '살결', title: '내 사랑에 노련한 사람이 어디 있나요', year: '2016', pick: 'jiwon', link: 'https://youtu.be/yeTqW3BOzKY?si=DlCfJdguqyfWvx0o', desc: '장얼 특유의 나른하면서도 끈적이는 빈티지 감성의 숨은 명곡' },
+          { track: '내 사랑에 노련한 사람이 어디 있나요', title: '4집 동명 타이틀', year: '2016', pick: 'jiwon', link: 'https://youtu.be/fJib0BL0frc?si=11CzJbBU1fyDK49w', desc: '사랑 앞에 서툴 수밖에 없는 모든 인간들을 대변하는 위트송' },
+          { track: '가나다', title: '사람의 마음', year: '2014', pick: 'jiwon', link: 'https://youtu.be/17YyZerpohY?si=GNFq61I7N1yMiZaz', desc: '기초적인 자음 모음 결합 위에 얹어낸 말도 안 되는 리드미컬 펑크록' },
+          { track: '그건 니 생각이고', title: 'mono', year: '2018', pick: 'jiwon', link: 'https://youtu.be/0rMNlyQo958?si=_Gt5TNUZjhEjSDNt', desc: '참견이 넘치는 세상을 향해 쿨하게 던지는 최고의 일침 트랙' }
+        ]
+      },
+      'bongjeingan': {
+        name: '봉제인간',
+        genre: '개러지 / 사이키델릭 록',
+        tagColor: 'red',
+        glowFrom: 'rgba(239, 68, 68, 0.35)',
+        oneLiner: '인디 씬의 최정예 멤버들이 뭉쳐 뿜어내는 정제되지 않은 가공의 충격 사운드',
+        mainImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz4HVJdMAiDkcYvQNXZrIabkzSNVv4dzavIsqSlLYddg&s',
+        bio: `봉제인간은 혁오의 임현제, 술탄오브더디스코의 지윤해, 그리고 장기하와 얼굴들 출신의 레전드 드러머 전일준이 전격 결성한 괴물 3인조 트리오 록 밴드입니다.\n\n정교하고 화려한 컴퓨터 음악이 가득 찬 현대 음악 씬에 반기를 들듯, 기타·베이스·드럼이라는 순수 악기 3대만으로 꽉 찬 날것 고유의 야생적 록 질감을 뿜어내며 평단과 리스너들을 단숨에 매료시켰습니다.`,
+        members: [
+          { name: '지윤해', role: '베이스 / 보컬 (술탄오브더디스코 출신)', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ4u_s0ZF64or28fS4PaIzSefc2ya2fY8X4WP091ceAw&s=10' },
+          { name: '임현제', role: '기타 (혁오 출신)', img: 'https://i.namu.wiki/i/--ARJAu2Mlhk83uM9sm-UFzIts3vx8xR5lk14kF6Q5dBe9QvgtRhjlg--te8Sbo3QX1QWNVYeJBGA4-7ajO5DH8CYzMtyVEegTSEUTwaXIEnfus8NtETV-OUSBsC3o34YSFLL25pseRqLxZ7gBAGbQ.webp' },
+          { name: '전일준', role: '드럼 (장기하와 얼굴들 출신)', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROTlYXxl3QWGLslv7lNMZlRiFxBX5c0oQSerVZVwCdJA&s=10' }
+        ],
+        albums: [
+          { track: '12가지말들', title: '12SANG', year: '2023', pick: 'public', link: 'https://youtu.be/oq9GI8GtEl0?si=EkuLti0N2V05DzgK', desc: '리드미컬한 지윤해의 보이스와 묵직한 베이스 전개가 돋보이는 곡' },
+          { track: 'BABY', title: '12SANG', year: '2023', pick: 'public', link: 'https://youtu.be/BFx0e32SG44?si=rwkcgmhkngh3dsbx', desc: '거친 라이브 클럽의 공기가 그대로 느껴지는 거침없는 합주' },
+          { track: '밤의 달리기', title: 'Single', year: '2023', pick: 'jiwon', link: 'https://youtu.be/jlcexgj7sAs?si=rPQu48j3vR8hsAM6', desc: '어두운 야간 도로를 무한히 폭주하는 듯한 임현제의 기타 톤' },
+          { track: 'GAEKKUM', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/Y3uhLcfwZ9E?si=cc8JA4Qrq6S3FBY5', desc: '사이키델릭한 몽환성과 개러지 펑크의 하드함이 폭발적으로 충돌하는 트랙' },
+          { track: '너만 없으면', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/dXvpR3md7cY?si=9p4LAgS--1rx-iGb', desc: '중독성 강한 가사와 전일준의 밀도 높은 정통 드럼 비트가 짜릿한 추천곡' },
+          { track: '꾸부렁할머니', title: '12SANG', year: '2023', pick: 'jiwon', link: 'https://youtu.be/-hSKRL2kLeQ?si=QCIGqcLas4o9o46r', desc: '전래동화 모티브를 현대식 헤비 개러지 사이키델릭으로 뒤틀어버린 수작' }
+        ]
+      },
+      'sultan': {
+        name: '술탄 오브 더 디스코',
+        genre: '소울 / 정통 댄스 디스코',
+        tagColor: 'purple',
+        glowFrom: 'rgba(139, 92, 246, 0.35)',
+        oneLiner: '극한의 컨셉충! 한국 유일무이 정통 디스코 밴드(댄서멤버도 있음)',
+        mainImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeHKcXNwbM3yWIN92Z4o-9y3rPK2Aeb377VhPYsu1uyw&s=10',
+        bio: `술탄 오브 더 디스코는 한국 인디 씬에서 가장 완벽하게 70년대 아프로(Afro) 소울, 디스코 사운드를 라이브 세션으로 재현해 내는 유일무이한 브라스 댄스 밴드입니다.\n\n가짜 아랍 펑크라는 유머러스한 컨셉 이면에는 세계적 페스티벌 무대를 뒤집어 놓은 고난도의 그루브 가창과 탄탄한 빈티지 신디사이저 연주 베이스가 단단하게 깔려 있습니다.`,
+        members: [
+          { name: '나잠 수', role: '리더 / 보컬 / 프로듀싱', img: 'https://i.namu.wiki/i/DBaz49f5IT5w_3-N_jA7Y8il4fkJ9hKZSbEBQF-_DdONkdTK4y0Ho2gMUv-J1I81_R7HbLXTOITU7lSWlsZlAllV91N5eXnIEJItakSYADAqVlb4E-9lYhFXjAyBszvs8stVP2yt6keFn5Wwo86Mgw.webp' },
+          { name: 'JJ핫산', role: '안무 / 코러스', img: 'https://i.namu.wiki/i/m4lHEfcNAFFXhekhibpNt5THZAnr295UYyLupGJ6syLXZwWIOZcA6uRJ5HSknwsABIJ6LAwFWMhwKolZ9WUaCkctFFZf4npwTgmKmpk9qbcN0CdRQhVAqxv8RUOKZH6gXkrOUdWhxPHyhewN0d041w.webp' },
+          { name: '김간지', role: '드럼', img: 'https://i.namu.wiki/i/czt44wJIPwbLYSrDXBQ823kTgnr3rPaIl9wiDkajoC3bphxAPSq_Fscn8N4ImF7-PceDfMF5lxFi1Y4EQhnRkVDrb2zitRNTr3al9JlXtj3wnJl1RqTwigXMDGIlp85gYAMtFD5hbuaXZho1an4KFg.webp' },
+          { name: '지', role: '베이스', img: 'https://i.namu.wiki/i/IQn7kx0fZPBn_NABBKkqTSGxVx3nYVfs8Ym3DJKQIxx7x5Mwr7fEnZkV73Cio5mZOW8LXDDNdfBqgk33bGLNNFWOo9G4z5lrSS5_HhTX69NAp2rJ8ofdbTK_DJktv1o2lRcswX6uyLgHROcCc9VaNw.webp' },
+          { name: '홍기', role: '기타', img: 'https://i.namu.wiki/i/rbbrTVGiYhs1TsWhambfmesivTPQlSFiHuBoY8CotfxeQAUHbClVaegOA_sKAR_RZgEnRur6LofwGe6N9ors6t1haQpIplK8BCgcTWEBZGk6hdbAV_3L-b-osqZ-EhHR7klQZpR-zc46m937_jpDsQ.webp' }
+        ],
+        albums: [
+          { track: '탱탱볼', title: 'Single', year: '2014', pick: 'public', link: 'https://youtu.be/3lVuCE_9DJo?si=B5Ro_jcCVO4K7PpH', desc: '한 번 들으면 귀에서 떠나지 않는 미친 신스 리프와 보컬 바운스' },
+          { track: 'Shining Road', title: 'Aliens', year: '2018', pick: 'public', link: 'https://youtu.be/05BWsYqMiYE?si=XNloB2jCayGHjzkO', desc: '세련된 모던 시티팝의 테두리를 절묘하게 얹은 뉴트로 그루브' },
+          { track: '의심스러워', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/A3ZkXaQ84Wo?si=kUIqmt5yLgdjLvJQ', desc: '술탄의 정체성을 전 세계에 알린 초절정 브라스 댄스 앤썸' },
+          { track: '파워 오브 오일', title: 'Single', year: '2015', pick: 'jiwon', link: 'https://youtu.be/XpmU1-TGS2E?si=hgEPnJjzPmziCRIK', desc: '중동 석유 부자의 위트를 정통 펑크 리듬에 담아낸 어깨 들썩용 명곡' },
+          { track: '요술왕자', title: 'The Golden Age', year: '2013', pick: 'jiwon', link: 'https://youtu.be/JOSmr7L2P18?si=Uj8nnWI_lg_ISKOa', desc: '가사 텍스트의 유치한 매력과 가창의 천재성이 어우러진 복고의 극치' },
+          { track: '버터플라이', title: 'Aliens', year: '2018', pick: 'jiwon', link: 'https://youtu.be/w8lDxsSY_yE?si=aUnn-H96fbgKYJ_y', desc: '슬로우 템포 소울 사운드의 우아함이 귀를 편안하게 감싸주는 숨은 필청 트랙' }
+        ]
+      },
+      'black-skirts': {
+        name: '검정치마',
+        genre: '드림 팝 / 인디 포크',
+        tagColor: 'pink',
+        glowFrom: 'rgba(236, 72, 153, 0.35)',
+        oneLiner: '조휴일이 자아내는 씁쓸하고도 처연하리만치 따스한 청춘의 방랑기',
+        mainImg: 'https://i.namu.wiki/i/F8hLbgcUTic8su-TvTRUc4lglxvbOACpDPfuussst2nOVfI0-mXWyJWnOXHGG0iqy24i2QgTwtIR3A-2k3xY9U8zITFIGMs46p52OFXh-FjwhPQo4WWkpxb9WWCy2ARj7necdYnuaEGmIlDDTYNsRQ.webp',
+        bio: `검정치마(The Black Skirts)는 조휴일의 1인 프로젝트 밴드로, 2008년 한국 씬 등장과 동시에 인디팝의 유행을 새로 쓴 거장 아티스트입니다.\n\n사랑의 순수한 맹세부터 청춘이 겪는 찌질함, 처절한 갈증과 이면을 여과 없이 은유적인 가사 안에 박제하는 최고의 낭만파 작곡가입니다.`,
+        members: [
+          { name: '조휴일', role: '프런트맨 / 보컬 / 멀티악기 세션 총괄', img: 'https://i.namu.wiki/i/F8hLbgcUTic8su-TvTRUc4lglxvbOACpDPfuussst2nOVfI0-mXWyJWnOXHGG0iqy24i2QgTwtIR3A-2k3xY9U8zITFIGMs46p52OFXh-FjwhPQo4WWkpxb9WWCy2ARj7necdYnuaEGmIlDDTYNsRQ.webp' }
+        ],
+        albums: [
+          { track: 'EVERYTHING', title: 'TEAM BABY', year: '2017', pick: 'public', link: 'https://youtu.be/K4giYflGxAY?si=7bY9f-A-FEx8xYaP', desc: '이 세상 그 어떤 단어로도 다 채우지 못할 올타임 세레나데' },
+          { track: 'Antifreeze', title: '201', year: '2008', pick: 'public', link: 'https://youtu.be/ZOx12VfIg0g?si=Xmz0qgsnyb6mpY16', desc: '세상이 꽁꽁 얼어붙어 종말이 와도 우리는 춤을 출 거라는 찬가' },
+          { track: '기다린만큼, 더', title: '또 오해영 OST', year: '2016', pick: 'public', link: 'https://youtu.be/uG2se-8-BzE?si=RNMzc5D9cSjyTi49', desc: '쓸쓸한 어쿠스틱 스트링 위에 절절한 그리움을 채운 대중적 메가히트곡' },
+          { track: 'Friends in bed', title: 'THIRSTY', year: '2019', pick: 'jiwon', link: 'https://youtu.be/unkWxF85Dp4?si=WT1JQPhM4uB8Ki3s', desc: '몽환적인 베드룸 인디팝의 질감을 영문 가사로 아주 세련되게 채운 곡' },
+          { track: '상수역', title: 'Single', year: '2017', pick: 'jiwon', link: 'https://youtu.be/3b6GhIprBdM?si=MxhYJurWQ0m2Qtgc', desc: '특정 공간이 주는 아련함과 낭만적인 밤공기를 스케치하듯 노래한 명작' },
+          { track: '한시 오분', title: 'TEAM BABY', year: '2017', pick: 'jiwon', link: 'https://youtu.be/vFXmR5wJY0w?si=w4WITP7xWTUEMsv5', desc: '시계 바늘이 멈춰 선 듯 흐르는 조휴일표 감성 코드의 정점 트랙' }
+        ]
+      }
+    };
+
+    const state = {
+      currentPage: 'home',
+      currentArtistId: null,
+      selectedTrack: null,
+      isPlaying: false
+    };
+
+    function navigateTo(page, artistId = null) {
+      state.currentPage = page;
+      state.currentArtistId = artistId;
+      
+      const homePage = document.getElementById('home-page');
+      const detailPage = document.getElementById('detail-page');
+
+      if (page === 'home') {
+        homePage.classList.remove('hidden');
+        detailPage.classList.add('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (page === 'artist') {
+        homePage.classList.add('hidden');
+        detailPage.classList.remove('hidden');
+        renderArtistDetail(artistId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function renderArtistDetail(id) {
+      const data = ARTISTS[id];
+      if (!data) return;
+
+      const hero = document.getElementById('artist-hero');
+      hero.style.background = `linear-gradient(135deg, ${data.glowFrom} 0%, rgba(10,10,10,1) 85%)`;
+      
+      const tag = document.getElementById('artist-tag');
+      tag.textContent = data.genre;
+      tag.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+        id === 'chang-kiha' ? 'bg-amber-500/20 text-amber-400' : 
+        id === 'bongjeingan' ? 'bg-red-500/20 text-red-400' : 
+        id === 'sultan' ? 'bg-purple-500/20 text-purple-400' : 'bg-pink-500/20 text-pink-400'
+      }`;
+      
+      document.getElementById('artist-name').textContent = data.name;
+      document.getElementById('artist-one-liner').textContent = data.oneLiner;
+      document.getElementById('artist-bio').textContent = data.bio;
+      document.getElementById('artist-detail-img').src = data.mainImg;
+
+      // Render Members Layout Customization
+      const memberContainer = document.getElementById('member-container');
+      memberContainer.innerHTML = '';
+      data.members.forEach(m => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition';
+        item.innerHTML = `
+          <div>
+            <p class="text-sm font-bold text-white">${m.name}</p>
+            <p class="text-[11px] text-neutral-400">${m.role}</p>
+          </div>
+          <div class="w-12 h-12 rounded-lg overflow-hidden border border-white/10 shrink-0 bg-neutral-900 shadow-md">
+            <img src="${m.img}" alt="${m.name}" class="w-full h-full object-cover">
+          </div>
+        `;
+        memberContainer.appendChild(item);
+      });
+
+      // Render Tracks with High Quality Custom Badge Stickers
+      const albumContainer = document.getElementById('artist-albums');
+      albumContainer.innerHTML = '';
+
+      data.albums.forEach((album, idx) => {
+        const item = document.createElement('div');
+        item.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/15 transition cursor-pointer gap-4';
+        item.onclick = () => selectTrack(album.track, data.name, album.link, album.desc, data.mainImg);
+
+        const badgeHtml = album.pick === 'public' 
+          ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-600/20 text-red-400 border border-red-500/30 flex items-center gap-0.5">대중 픽 🔴</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-0.5">지원 픽 🌟</span>`;
+
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-lg bg-neutral-800 flex items-center justify-center font-bold text-xs text-neutral-400">
+              ${idx + 1}
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <p class="font-bold text-sm text-white">${album.track}</p>
+                ${badgeHtml}
+              </div>
+              <p class="text-[11px] text-neutral-400">${album.title} (${album.year})</p>
+            </div>
+          </div>
+          <button class="px-3 py-1 bg-white/5 hover:bg-pink-600 hover:text-white rounded-full text-xs font-bold transition flex items-center gap-1 shrink-0 ml-auto sm:ml-0">
+            곡 선택 <i data-lucide="play-circle" class="w-3.5 h-3.5 text-pink-500"></i>
+          </button>
+        `;
+        albumContainer.appendChild(item);
+      });
+
+      lucide.createIcons();
+
+      // Initial Default selection setup
+      if (data.albums.length > 0) {
+        setPlayerTrack(data.albums[0].track, data.name, data.albums[0].link, data.albums[0].desc, data.mainImg);
+      }
+    }
+
+    function setPlayerTrack(track, artistName, link, desc, coverImg) {
+      state.selectedTrack = { track, artistName, link, desc };
+      
+      document.getElementById('player-title').textContent = track;
+      document.getElementById('player-artist').textContent = artistName;
+      document.getElementById('curator-comment').innerHTML = `"${desc}"`;
+      
+      // Update Vinyl Core Photo Label
+      const cov = document.getElementById('player-cover-img');
+      cov.src = coverImg;
+      cov.classList.remove('hidden');
+
+      // Bind link directly to Button safely
+      const btn = document.getElementById('youtube-direct-btn');
+      btn.href = link;
+
+      // Reset Visual animations to stand-by
+      state.isPlaying = false;
+      document.getElementById('equalizer').classList.add('hidden');
+      document.getElementById('player-disk').classList.remove('animate-spin');
+    }
+
+    function selectTrack(track, artistName, link, desc, coverImg) {
+      setPlayerTrack(track, artistName, link, desc, coverImg);
+      
+      // Play Trigger immediately (simulated animations start)
+      state.isPlaying = true;
+      document.getElementById('equalizer').classList.remove('hidden');
+      document.getElementById('player-disk').classList.add('animate-spin');
+      document.getElementById('player-disk').style.animationDuration = '12s';
+      
+      showToast(`🎵 "${track}" 선택됨! 유튜브로 직접 청취해보세요.`);
+    }
+
+    function getRandomTrack() {
+      const keys = Object.keys(ARTISTS);
+      const randomArtistId = keys[Math.floor(Math.random() * keys.length)];
+      const artist = ARTISTS[randomArtistId];
+      const randomTrack = artist.albums[Math.floor(Math.random() * artist.albums.length)];
+
+      showToast(`🎲 큐레이터 랜덤 Pick: ${artist.name} - ${randomTrack.track}`);
+      
+      setTimeout(() => {
+        navigateTo('artist', randomArtistId);
+        selectTrack(randomTrack.track, artist.name, randomTrack.link, randomTrack.desc, artist.mainImg);
+      }, 400);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      
+      toastMsg.textContent = msg;
+      toast.classList.remove('remove', 'translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+
+    // Quiz Match Engine Logic
+    const quizSteps = [
+      {
+        options: [
+          { text: "아날로그 낭만과 재치 가득한 말맛이 필요해 📻", score: "chang-kiha", desc: "당신에겐 시대를 뛰어넘는 명반을 남긴 [장기하와 얼굴들]의 쿵짝 리듬이 운명입니다." },
+          { text: "폭발하는 가공 없는 날것의 순수 록 사운드! ⚡", score: "bongjeingan", desc: "대한민국 최고 세션들이 모인 [봉제인간]의 개러지 라이브가 에너지를 가득 채워줄 것입니다." },
+          { text: "몸치도 강제로 춤추게 만드는 빈티지 디스코 소울 🕺", score: "sultan", desc: "[술탄 오브 더 디스코]의 황금 브라스 펑크 그루브가 오늘 당신의 무릎 바운스를 책임집니다." },
+          { text: "쓸쓸하면서도 달콤한 내 방 침대 같은 드림팝 🌙", score: "black-skirts", desc: "조휴일의 독보적인 감성시가 담긴 [검정치마]의 트랙들이 마음을 촉촉하게 적셔줄 것입니다." }
+        ]
+      }
+    ];
+
+    function openQuiz() {
+      const modal = document.getElementById('quiz-modal');
+      const qContainer = document.getElementById('quiz-question-container');
+      const rContainer = document.getElementById('quiz-result-container');
+      
+      modal.classList.remove('hidden');
+      qContainer.classList.remove('hidden');
+      rContainer.classList.add('hidden');
+
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = '';
+
+      quizSteps[0].options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-3.5 rounded-xl bg-white/5 border border-white/5 hover:border-pink-500/50 hover:bg-pink-500/10 text-xs font-semibold transition leading-relaxed";
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          qContainer.classList.add('hidden');
+          rContainer.classList.remove('hidden');
+
+          const match = ARTISTS[opt.score];
+          document.getElementById('quiz-match-name').textContent = match.name;
+          document.getElementById('quiz-match-desc').textContent = opt.desc;
+
+          const goBtn = document.getElementById('quiz-go-btn');
+          goBtn.className = `w-full py-2.5 text-neutral-950 font-bold rounded-xl text-xs transition ${
+            opt.score === 'chang-kiha' ? 'bg-amber-400 hover:bg-amber-300' : 
+            opt.score === 'bongjeingan' ? 'bg-red-500 text-white hover:bg-red-400' : 
+            opt.score === 'sultan' ? 'bg-purple-500 text-white hover:bg-purple-400' : 'bg-pink-500 text-white hover:bg-pink-400'
+          }`;
+          goBtn.onclick = () => {
+            closeQuiz();
+            navigateTo('artist', opt.score);
+          };
+        };
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function closeQuiz() {
+      document.getElementById('quiz-modal').classList.add('hidden');
+    }
+
+    window.onload = function() {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
